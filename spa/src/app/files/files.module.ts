@@ -49,6 +49,7 @@ import { KeywordsModule } from "../keywords/keywords.module";
 import { FilesDAO } from "./shared/files.dao";
 import { FilesService } from "./shared/files.service";
 import { TableComponent } from "./table/table.component";
+import { HCAFileSummaryComponent } from "./hca-file-summary/hca-file-summary.component";
 
 @NgModule({
     imports: [
@@ -96,7 +97,11 @@ import { TableComponent } from "./table/table.component";
         FileFacetWrapperComponent,
         TableComponent,
 
-        FileNameShortenerPipe],
+        FileNameShortenerPipe,
+
+        // Components specific to Boardwalk instances
+        HCAFileSummaryComponent
+    ],
     providers: [
         ConfigService,
         FilesService,

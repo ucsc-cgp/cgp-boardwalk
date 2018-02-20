@@ -1,8 +1,8 @@
 <div class="layout-column layout-padding">
-    <bw-file-summary [summary]="selectFileSummary$ | async"></bw-file-summary>
+    <hca-file-summary [summary]="selectFileSummary$ | async"></hca-file-summary>
     <bw-file-facets [fileFacets]="fileFacets$ | async">
     </bw-file-facets>
-    <button class="cgl-fab"
+    <button class="cgl-fab hca-fab"
             mat-fab
             matTooltip="Download Manifest"
             [matTooltipPosition]="'before'"

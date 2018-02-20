@@ -1,0 +1,59 @@
+/*!
+ * UCSC Genomics Institute - CGL
+ * https://cgl.genomics.ucsc.edu/
+ *
+ * File summary styles.
+ */
+
+@import "../../shared/theme/cgl.vars";
+
+:host {
+
+    mat-card {
+
+        color: #ffffff;
+        padding: 0;
+
+        .summary-count {
+
+            align-items: center;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            text-align: right;
+
+            &:before {
+                font-family: "Material Icons";
+                font-size: 40px;
+                opacity: 0.7;
+            }
+
+            /** Override default MD bottom margin/padding to scoot count and label closer, and top margin/padding to vertically align correctly in card **/
+            .mat-headline {
+                margin: 0;
+                padding: 0;
+            }
+
+            &.file {
+                background-color: #172984;
+                &:before {
+                    content: "\E8C3";
+                }
+            }
+
+            &.donor {
+                background-color: #4A90E2;
+                &:before {
+                    content: "\E24D";
+                }
+            }
+
+            &.size {
+                background-color: #24D1F2;
+                &:before {
+                    content: "\E1AF";
+                }
+            }
+        }
+    }
+}

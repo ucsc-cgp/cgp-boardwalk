@@ -11,7 +11,6 @@
 
     mat-card {
 
-        color: #ffffff;
         padding: 0;
 
         .summary-count {
@@ -35,23 +34,61 @@
             }
 
             &.file {
-                background-color: #172984;
+                background-color: #ffffff;
                 &:before {
                     content: "\E8C3";
                 }
             }
 
             &.donor {
-                background-color: #4A90E2;
+                background-color: #ffffff;
                 &:before {
                     content: "\E24D";
                 }
             }
 
             &.size {
-                background-color: #24D1F2;
+                background-color: #ffffff;
                 &:before {
                     content: "\E1AF";
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Extra small
+ */
+@media (max-width: $md-xs-max) {
+
+    :host {
+
+        mat-card {
+
+            // Add border between stacked summary counts
+            .summary-count {
+                &+.summary-count {
+                    border-top: 2px solid #eeeeee;
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Small +
+ */
+@media (min-width: $md-sm-min) {
+
+    :host {
+
+        mat-card {
+
+            // Add border between stacked summary counts
+            .summary-count {
+                &+.summary-count {
+                    border-left: 2px solid #eeeeee;
                 }
             }
         }

@@ -6,6 +6,7 @@
  */
 
 export interface FileSummary {
+    bodyPartsCount: number;
     fileCount: number;
     totalFileSize: number;
     donorCount: number;

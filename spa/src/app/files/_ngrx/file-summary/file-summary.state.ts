@@ -2,6 +2,7 @@ import { FileSummary } from "../../file-summary/file-summary";
 import { FetchFileSummarySuccessAction } from "./file-summary.actions";
 
 const DEFAULT_FILE_SUMMARY = {
+    bodyPartsCount: 0,
     fileCount: 0,
     totalFileSize: 0,
     donorCount: 0,
@@ -12,6 +13,7 @@ const DEFAULT_FILE_SUMMARY = {
 
 export class FileSummaryState implements FileSummary {
 
+    bodyPartsCount: number;
     fileCount: number;
     totalFileSize: number;
     donorCount: number;

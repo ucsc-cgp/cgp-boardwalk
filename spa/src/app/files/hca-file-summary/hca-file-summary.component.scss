@@ -33,22 +33,32 @@
                 padding: 0;
             }
 
-            &.file {
-                background-color: #ffffff;
+            &.body-part {
+                &:before {
+                    content: "\E84E";
+                }
+            }
+            
+            &.donor {
+                
                 &:before {
                     content: "\E8C3";
                 }
             }
-
-            &.donor {
-                background-color: #ffffff;
+            
+            &.file {
                 &:before {
                     content: "\E24D";
                 }
             }
 
+            &.project {
+                &:before {
+                    content: "\E2C7";
+                }
+            }
+
             &.size {
-                background-color: #ffffff;
                 &:before {
                     content: "\E1AF";
                 }
@@ -58,9 +68,9 @@
 }
 
 /**
- * Extra small
+ * Extra small, small
  */
-@media (max-width: $md-xs-max) {
+@media (max-width: $md-sm-max) {
 
     :host {
 

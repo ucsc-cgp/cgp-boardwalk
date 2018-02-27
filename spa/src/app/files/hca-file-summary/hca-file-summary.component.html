@@ -1,12 +1,24 @@
 <mat-card>
-    <div class="layout-column layout-gt-xs-row">
-        <div class="layout-padding flex summary-count file">
+    <div class="layout-column layout-gt-sm-row">
+        <div class="layout-padding flex summary-count project">
             <div>
-                <h3 class="mat-headline">{{summary.donorCount | localeString}}</h3>
-                <span class="md-body-1">Cells</span>
+                <h3 class="mat-headline">{{summary.projectCount | localeString}}</h3>
+                <span class="md-body-1">Projects</span>
+            </div>
+        </div>
+        <div class="layout-padding flex summary-count body-part">
+            <div>
+                <h3 class="mat-headline">{{summary.primarySiteCount | localeString}}</h3>
+                <span class="md-body-1">Body Parts</span>
             </div>
         </div>
         <div class="layout-padding flex summary-count donor">
+            <div>
+                <h3 class="mat-headline">{{summary.donorCount | localeString}}</h3>
+                <span class="md-body-1">Samples</span>
+            </div>
+        </div>
+        <div class="layout-padding flex summary-count file">
             <div>
                 <h3 class="mat-headline">{{summary.fileCount | localeString}}</h3>
                 <span class="md-body-1">Files</span>
@@ -15,7 +27,7 @@
         <div class="layout-padding flex summary-count size">
             <div>
                 <h3 class="mat-headline">{{summary.totalFileSize | fileSize}}</h3>
-                <span class="md-body-1">Size</span>
+                <span class="md-body-1">File Size</span>
             </div>
         </div>
     </div>

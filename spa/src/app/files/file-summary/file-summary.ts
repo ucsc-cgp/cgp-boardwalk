@@ -6,9 +6,10 @@
  */
 
 export interface FileSummary {
-    bodyPartsCount: number;
+    bodyPartsCounts: number;
     fileCount: number;
     totalFileSize: number;
+    sampleCount: number;
     donorCount: number;
     projectCount: number;
     primarySiteCount: number;

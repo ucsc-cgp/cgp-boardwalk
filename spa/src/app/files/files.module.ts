@@ -46,10 +46,10 @@ import { FileNameShortenerPipe } from "./file-search/file-name-shortener";
 import { FileSearchComponent } from "./file-search/file-search.component";
 import { FileSummaryComponent } from "./file-summary/file-summary.component";
 import { KeywordsModule } from "../keywords/keywords.module";
+import { HCAFileSummaryComponent } from "./hca-file-summary/hca-file-summary.component";
+import { HCATableComponent } from "./hca-table/hca-table.component";
 import { FilesDAO } from "./shared/files.dao";
 import { FilesService } from "./shared/files.service";
-import { TableComponent } from "./table/table.component";
-import { HCAFileSummaryComponent } from "./hca-file-summary/hca-file-summary.component";
 
 @NgModule({
     imports: [
@@ -95,7 +95,7 @@ import { HCAFileSummaryComponent } from "./hca-file-summary/hca-file-summary.com
         FileFacetSearchComponent,
         FileFacetSearchMenuComponent,
         FileFacetWrapperComponent,
-        TableComponent,
+        HCATableComponent,
 
         FileNameShortenerPipe,
 

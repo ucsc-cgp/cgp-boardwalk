@@ -11,6 +11,9 @@ COPY . /usr/src/app/
 RUN npm install
 RUN npm -g install grunt-cli
 RUN npm -g install typescript@2.7.2
+WORKDIR /usr/src/app/spa
+RUN npm install
+WORKDIR /usr/src/app
 RUN grunt build
 RUN rm boardwalk.zip
 RUN rm -rf spa/node_modules

@@ -11,7 +11,6 @@ import { ActivatedRoute } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/map";
-
 // App dependencies
 import { FileFacet } from "./shared/file-facet.model";
 import { FileSummary } from "./file-summary/file-summary";
@@ -23,6 +22,11 @@ import {
 import { selectFileFacetsFileFacets, selectFileSummary, selectSelectedFileFacets } from "./_ngrx/file.selectors";
 import { AppState } from "../_ngrx/app.state";
 import { FetchFileFacetsRequestAction } from "./_ngrx/file-facet-list/file-facet-list.actions";
+import { MatDialog } from "@angular/material";
+import { FileExportComponent } from "./file-export/file-export.component";
+import { FileExportManifestState } from "./_ngrx/file-export/file-export.state";
+import { FireCloudDAO } from "./file-export/fire-cloud-dao";
+import { CCAlertDialogComponent } from "../shared/cc-alert-dialog/cc-alert-dialog.component";
 
 @Component({
     selector: "bw-files",
@@ -38,15 +42,21 @@ export class FilesComponent implements OnInit {
     // Public variables
     public selectFileSummary$: Observable<FileSummary>;
     public fileFacets$: Observable<FileFacet[]>;
+<<<<<<< 8ffabfd86065876a14945e479f51744b3a97a41d
     public selectedFileFacets$: Observable<FileFacet[]>;
 
+=======
+    public exportManifest$: Observable<FileExportManifestState>;
+>>>>>>> Export to firecloud (#1)
 
     /**
      * @param route {ActivatedRoute}
      * @param store {Store<AppState>}
      */
     constructor(route: ActivatedRoute,
-                store: Store<AppState>) {
+                store: Store<AppState>,
+                private dialog: MatDialog,
+                private fireCloudDAO: FireCloudDAO) {
 
         this.route = route;
         this.store = store;
@@ -69,8 +79,41 @@ export class FilesComponent implements OnInit {
      * Dispatch action to download manifest summary.
      */
     public onDownloadManifest() {
-        
         this.store.dispatch(new DownloadFileManifestAction());
+    }
+
+    onExportToFireCloud() {
+        this.fireCloudDAO.fetchNamespaces()
+            .subscribe(namespaces => {
+                if (namespaces.length > 0) {
+                    const projectNames: string[] = namespaces.map(namespace => namespace.projectName);
+                    this.dialog.open(FileExportComponent, {
+                        data: {
+                            workspace: "",
+                            namespace: projectNames[0],
+                            namespaces: projectNames,
+                            store: this.store,
+                            exportManifest$: this.exportManifest$
+                        }
+                    });
+                }
+                else {
+                    this.dialog.open(CCAlertDialogComponent, {
+                        data: {
+                            title: "Error",
+                            message: "You do not have any billing projects associated with your FireCloud account. You must have at least one in order to proceed."
+                        }
+                    });
+                }
+            },
+            () => {
+                this.dialog.open(CCAlertDialogComponent, {
+                    data: {
+                        title: "Error",
+                        message: "There was an error fetching your FireCloud billing accounts. Try logging in again."
+                    }
+                });
+            });
     }
 
     /**
@@ -120,4 +163,5 @@ export class FilesComponent implements OnInit {
                 this.store.dispatch(new FetchFileFacetsRequestAction());
             });
     }
+
 }

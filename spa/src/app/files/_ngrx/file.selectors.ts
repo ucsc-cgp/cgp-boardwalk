@@ -12,6 +12,7 @@ import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { FileSummaryState } from "./file-summary/file-summary.state";
 import { FileFacetListState } from "./file-facet-list/file-facet-list.state";
 import { FileFacetMetadataSummaryState } from "./file-facet-metadata-summary/file-facet-metadata-summary.state";
+import { FileExportManifestState } from "./file-export/file-export.state";
 import { TableState } from "./table/table.state";
 
 export const selectFileFacets = createFeatureSelector<FileFacetListState>("fileFacetList");
@@ -32,7 +33,7 @@ export const selectTableState = createFeatureSelector<TableState>("tableState");
 
 /**
  * Returns current state of pagination, of file facet table.
- * 
+ *
  * @type {MemoizedSelector<object, PaginationModel>}
  */
 export const selectPagination = createSelector(selectTableState,(tableState: TableState) => {
@@ -50,5 +51,5 @@ export const selectTableQueryParams = createSelector(selectSelectedFacetsMap, se
     return { selectedFacets, pagination };
 });
 
-
+export const selectExportFileState = createFeatureSelector<FileExportManifestState>("fileExportState");
 

@@ -8,23 +8,8 @@
             <cc-toolbar-nav-item>
                 <a href="{{rootUrl}}/index.html">Home</a>
             </cc-toolbar-nav-item>
-            <cc-toolbar-nav-item>
-                <a href="{{rootUrl}}/file_browser.html">Browser</a>
-            </cc-toolbar-nav-item>
             <cc-toolbar-nav-item class="active">
                 <a href="{{rootUrl}}/boardwalk.html">Boardwalk</a>
-            </cc-toolbar-nav-item>
-            <cc-toolbar-nav-item>
-                <a href="{{rootUrl}}/redwood.html">Redwood</a>
-            </cc-toolbar-nav-item>
-            <cc-toolbar-nav-item>
-                <a href="{{rootUrl}}/spinnaker.html">Spinnaker</a>
-            </cc-toolbar-nav-item>
-            <cc-toolbar-nav-item *ngIf="authorizedUser$ | async">
-                <a href="{{rootUrl}}/action_service.html">Action</a>
-            </cc-toolbar-nav-item>
-            <cc-toolbar-nav-item *ngIf="authorizedUser$ | async">
-                <a href="{{rootUrl}}/invoicing_service.html">Invoicing</a>
             </cc-toolbar-nav-item>
             <cc-toolbar-nav-item>
                 <a href="https://ucsc-cgl.atlassian.net/wiki/" target="_blank">Wiki</a>
@@ -40,10 +25,6 @@
             </cc-toolbar-nav-item>
             <cc-toolbar-nav-item *ngIf="!(authorizedUser$ | async)">
                 <a href="{{rootUrl}}/login">Login</a>
-            </cc-toolbar-nav-item>
-            <cc-toolbar-nav-item *ngIf="authorizedUser$ | async">
-                <a *ngIf="hasRedwoodToken$ | async" (click)="onDownloadRedwoodToken()">Get Token</a>
-                <a *ngIf="!(hasRedwoodToken$ | async)">No Token</a>
             </cc-toolbar-nav-item>
         </cc-toolbar-nav>
     </mat-toolbar-row>

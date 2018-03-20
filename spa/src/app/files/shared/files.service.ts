@@ -25,6 +25,15 @@ export class FilesService {
         return this.fileDAO.downloadFileManifest(selectedFacets);
     }
 
+    public exportToFireCloud(selectedFacets: FileFacet[], workspaceName: string, workspaceNamespace: string): Observable<string> {
+
+        return this.fileDAO.exportToFireCloud(selectedFacets, workspaceName, workspaceNamespace)
+            .catch(err => {
+                const message = err.statusText || "Unknown error";
+                return Observable.of(`Error: ${message}`);
+            });
+    }
+
     /**
      * Fetch File Facets
      *

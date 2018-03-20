@@ -48,6 +48,10 @@ import {
 } from "./table/table.actions";
 import { TableModel } from "../table/table.model";
 import { DEFAULT_TABLE_PARAMS } from "../table/table-params.model";
+import {
+    FileExportManifestRequestAction, FileExportManifestErrorAction,
+    FileExportManifestSuccessAction
+} from "./file-export/file-export.actions";
 
 @Injectable()
 export class FileEffects {
@@ -90,7 +94,7 @@ export class FileEffects {
      */
 
     /**
-     * Trigger update of file summary if a facet changes (ie term is selected or deseclted. File summary includes the 
+     * Trigger update of file summary if a facet changes (ie term is selected or deseclted. File summary includes the
      * donor count, file count etc that is displayed above the facets.
      *
      * @type {Observable<Action>}
@@ -137,7 +141,7 @@ export class FileEffects {
         });
 
     /**
-     * 
+     *
      */
     @Effect()
     fetchInitialTableData$: Observable<Action> = this.actions$
@@ -190,8 +194,24 @@ export class FileEffects {
             return this.fileService.downloadFileManifest(query);
         });
 
+    @Effect()
+    exportToFireCloud$: Observable<Action> = this.actions$
+        .ofType<FileExportManifestRequestAction>(FileExportManifestRequestAction.ACTION_TYPE)
+        .map(action => action.payload)
+        .withLatestFrom(this.store.select(selectSelectedFileFacets))
+        .switchMap((results) => {
+            const [payload, selectedFacets] = results;
+            return this.fileService.exportToFireCloud(selectedFacets, payload.name, payload.namespace);
+        })
+        .map((fcUrl) => {
+            if (fcUrl.startsWith("Error")) {
+                return new FileExportManifestErrorAction(fcUrl);
+            }
+            return new FileExportManifestSuccessAction(fcUrl);
+        });
+
     private colorWheel: Map<string, string>;
-    
+
     /**
      * Trigger update of facets once a facet term is selected/deselected.
      *
@@ -224,7 +244,7 @@ export class FileEffects {
                     })
             );
         });
-    
+
     /**
      * Trigger update of facet counts on init.
      *

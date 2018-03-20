@@ -3,6 +3,7 @@ import { FileFacetListState } from "./file-facet-list/file-facet-list.state";
 import { FileManifestSummaryState } from "./file-manifest-summary/file-manifest-summary.state";
 import { FileFacetMetadataSummaryState } from "./file-facet-metadata-summary/file-facet-metadata-summary.state";
 import { TableState } from "./table/table.state";
+import { FileExportManifestState } from "./file-export/file-export.state";
 
 export interface FileState {
     fileSummary: FileSummaryState;
@@ -10,4 +11,5 @@ export interface FileState {
     fileManifestSummary: FileManifestSummaryState;
     fileFacetMetadataSummary: FileFacetMetadataSummaryState;
     tableState: TableState;
+    exportFileManifestState: FileExportManifestState;
 }

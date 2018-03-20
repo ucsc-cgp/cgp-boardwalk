@@ -58,6 +58,11 @@ export class CCBaseDAO {
      */
     public get<T>(url: string, queryStringParams?: any): Observable<T> {
 
+        return this.getNoCatch(url, queryStringParams)
+            .catch(response => this.handleError(response));
+    }
+
+    public getNoCatch<T>(url: string, queryStringParams?: any): Observable<T> {
         // Build up GET headers
         let headers = new Headers();
         this.addAcceptHeader(headers);
@@ -79,8 +84,7 @@ export class CCBaseDAO {
 
         return <Observable<T>>this.http // TODO revisit typing here...
             .get(url, requestOptions)
-            .map(response => this.toJSON(response))
-            .catch(response => this.handleError(response));
+            .map(response => this.toJSON(response));
     }
 
     /**

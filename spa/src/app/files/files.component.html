@@ -9,5 +9,12 @@
             (click)="onDownloadManifest()">
         <mat-icon>file_download</mat-icon>
     </button>
+    <button class="cgl-fab cgl-fab2"
+            mat-fab
+            matTooltip="Export to FireCloud"
+            [matTooltipPosition]="'before'"
+            (click)="onExportToFireCloud()">
+        <mat-icon>cloud_upload</mat-icon>
+    </button>
     <bw-table></bw-table>
 </div>

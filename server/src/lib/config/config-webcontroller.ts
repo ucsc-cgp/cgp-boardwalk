@@ -12,6 +12,7 @@ import { Response as Res } from "express";
 import { Req } from "../../boardwalk";
 import { setupResponseCallback } from "cc-express-utils";
 import { ConfigViewModel } from "./config-view.model";
+import { Response } from "~express/lib/express";
 
 /**
  * Handle request for environment config. Default data URL to "https://carlos.ucsc-cgp-dev.org".
@@ -19,7 +20,7 @@ import { ConfigViewModel } from "./config-view.model";
  * @param {Req} req
  * @param {Response} res
  */
-export function getConfig(req: Req, res: Res): void {
+export function getConfig(req: Req, res: Res): Response {
 
     return setupResponseCallback(res)(null, {
         dataURL: process.env.BW_DATA_URL || "https://carlos.ucsc-cgp-dev.org"

@@ -34,6 +34,7 @@ import { CCHamburgerDirective } from "./shared/cc-hamburger/cc-hamburger.directi
 import { CGLSubnavComponent } from "./shared/cgl-subnav/cgl-subnav.component";
 import { CGLToolbarComponent } from "./shared/cgl-toolbar/cgl-toolbar.component";
 import { ConfigService } from "./config/config.service";
+import { CCAlertDialogComponent } from "./shared/cc-alert-dialog/cc-alert-dialog.component";
 
 @NgModule({
     bootstrap: [AppComponent],
@@ -73,6 +74,7 @@ import { ConfigService } from "./config/config.service";
         CCHamburgerDirective,
         CGLSubnavComponent,
         CGLToolbarComponent,
+        CCAlertDialogComponent,
     ],
     providers: [
         UserService,

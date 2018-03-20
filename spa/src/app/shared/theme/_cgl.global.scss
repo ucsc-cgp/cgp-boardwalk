@@ -79,6 +79,21 @@ $cgl-fab-gutter-gt-xs: 24px;
         color: #ffffff;
         position: fixed;
     }
+
+    /** Update gutter width for medium devices and above */
+    @media (min-width: $md-md-min) {
+
+        bottom: $cgl-fab-gutter-gt-xs + 112px; /* +112 for squashed, inline footer */
+        right: $cgl-fab-gutter-gt-xs;
+    }
+
+    &.cgl-fab2 {
+        bottom: $cgl-fab-gutter-xs + 70px;
+        @media (min-width: $md-md-min) {
+
+            bottom: $cgl-fab-gutter-gt-xs + 112px + 70px; /* +112 for squashed, inline footer */
+        }
+    }
 }
 
 /** Override MD default focus style of dialog action buttons */

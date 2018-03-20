@@ -178,6 +178,19 @@ export class FilesDAO extends CCBaseDAO {
         return Observable.of(true); // TODO error handling? I'm not sure setting the href causes any errors
     }
 
+    exportToFireCloud(selectedFacets: FileFacet[], workspaceName: string, workspaceNamespace: string): Observable<string> {
+        const query = new ICGCQuery(this.facetsToQueryString(selectedFacets), "tarball");
+        const params = Object.assign({"workspace": workspaceName, "namespace": workspaceNamespace}, query);
+
+        const url = this.buildDataUrl(`//export_to_firecloud`);
+        // return Observable.of(`https://portal.firecloud.org/${workspaceNamespace}/${workspaceName}`);
+        return this.getNoCatch(url, params)
+            .map(() => {
+                // TODO: Should get this from response
+                return `https://portal.firecloud.org/#workspaces/${workspaceNamespace}/${workspaceName}`;
+            });
+    }
+
     /**
      * Privates
      */
@@ -191,6 +204,12 @@ export class FilesDAO extends CCBaseDAO {
     private buildApiUrl(url: string) {
 
         const domain = this.configService.getAPIURL();
+        return `${domain}${url}`;
+    }
+
+    private buildDataUrl(url: string) {
+
+        const domain = this.configService.getDataURL();
         return `${domain}${url}`;
     }
 

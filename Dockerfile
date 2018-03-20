@@ -4,6 +4,8 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 RUN npm install pm2 -g
 
+RUN npm install -g @angular/cli
+
 # Install app dependencies
 COPY . /usr/src/app/
 RUN npm install

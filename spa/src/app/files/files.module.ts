@@ -59,6 +59,7 @@ import { TableComponent } from "./table/table.component";
 import { FileExportComponent } from "./file-export/file-export.component";
 import { FireCloudDAO } from "./file-export/fire-cloud-dao";
 import { CCAlertDialogComponent } from "../shared/cc-alert-dialog/cc-alert-dialog.component";
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
     imports: [
@@ -87,6 +88,9 @@ import { CCAlertDialogComponent } from "../shared/cc-alert-dialog/cc-alert-dialo
         CcPipeModule,
         CCStopPropagationModule,
         CcTypeaheadModule,
+
+        // Needed for icon registry
+        HttpClientModule,
 
         KeywordsModule
 

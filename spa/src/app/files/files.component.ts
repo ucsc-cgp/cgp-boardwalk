@@ -22,11 +22,12 @@ import {
 import { selectFileFacetsFileFacets, selectFileSummary, selectSelectedFileFacets } from "./_ngrx/file.selectors";
 import { AppState } from "../_ngrx/app.state";
 import { FetchFileFacetsRequestAction } from "./_ngrx/file-facet-list/file-facet-list.actions";
-import { MatDialog } from "@angular/material";
+import { MatDialog, MatIconRegistry } from "@angular/material";
 import { FileExportComponent } from "./file-export/file-export.component";
 import { FileExportManifestState } from "./_ngrx/file-export/file-export.state";
 import { FireCloudDAO } from "./file-export/fire-cloud-dao";
 import { CCAlertDialogComponent } from "../shared/cc-alert-dialog/cc-alert-dialog.component";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
     selector: "bw-files",
@@ -56,10 +57,14 @@ export class FilesComponent implements OnInit {
     constructor(route: ActivatedRoute,
                 store: Store<AppState>,
                 private dialog: MatDialog,
-                private fireCloudDAO: FireCloudDAO) {
+                private fireCloudDAO: FireCloudDAO,
+                private iconRegistry: MatIconRegistry,
+                private sanitizer: DomSanitizer) {
 
         this.route = route;
         this.store = store;
+        iconRegistry.addSvgIcon("firecloud",
+            sanitizer.bypassSecurityTrustResourceUrl("/assets/images/thirdparty/FireCloud-white-icon.svg"));
     }
 
     /**

@@ -9,7 +9,7 @@
 import {
     Component,
     Input,
-    ChangeDetectionStrategy,
+    ChangeDetectionStrategy
 } from "@angular/core";
 
 // App dependencies

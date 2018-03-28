@@ -30,8 +30,8 @@ export class HCATableComponent implements OnInit {
     private store: Store<AppState>;
 
     displayedColumns = [
-        "sampleId", "sampleSpecies", "sampleNcbiTaxonIds", "assayId", "rnaLibraryConstruction", "bundleType",
-        "fileName", "fileUuid", "fileVersion", "fileSize"
+        "biomaterial", "organ", "organPart", "libraryConstruction", "species", "age",
+        "ageUnit", "sex", "diseased"
     ];
     tableElementDataSource: TableElementDataSource;
     pagination$: Observable<PaginationModel>;
@@ -252,16 +252,15 @@ export class HCATableComponent implements OnInit {
  * Elements in Material Design table that displays HCA-specific file related data.
  */
 export interface Element {
-    sampleId: string;
-    sampleSpecies: string;
-    sampleNcbiTaxonIds: string;
-    assayId: string;
-    rnaLibraryConstruction: string;
-    bundleType: string;
-    fileName: string;
-    fileUuid: string;
-    fileVersion: string;
-    fileSize: string;
+    biomaterial: string; // TODO check not array
+    organ: string;
+    organPart: string;
+    libraryConstruction: string;
+    species: string;
+    age: string;
+    ageUnit: string;
+    sex: string;
+    diseased: string; // TODO check not array
 }
 
 /**
@@ -282,21 +281,19 @@ class TableElementDataSource extends DataSource<any> {
 
             return rows.map((row: any) => {
                 
-                let firstSample = row.samples[0] || {}; // TODO revisit - samples is an array for single hit?
-                let assay = row.assay || {};
-                let fileCopies = row.fileCopies[0] || {}; // TODO revisit - fileCopies is an array for single hit?
+                let biomaterials = row.biomaterials[0] || {}; // TODO revisit - samples is an array for single hit?
+                let processes = row.processes[0] || {};
 
                 return {
-                    sampleId: firstSample.sampleId,
-                    sampleSpecies: firstSample.sampleSpecies,
-                    sampleNcbiTaxonIds: firstSample.sampleNcbiTaxonIds,
-                    assayId: assay.assayId,
-                    rnaLibraryConstruction: assay.rnaLibraryConstruction,
-                    bundleType: row.bundleType,
-                    fileName: fileCopies.fileName,
-                    fileUuid: fileCopies.fileUuid,
-                    fileVersion: fileCopies.fileVersion,
-                    fileSize: fileCopies.fileSize
+                    biomaterial: biomaterials.biomaterialId,
+                    organ: biomaterials.biomateriaOrgan,
+                    organPart: biomaterials.biomaterialOrganPart,
+                    libraryConstruction: processes.libraryConstructionApproach,
+                    species: biomaterials.biomaterialGenusSpecies[0],
+                    age: biomaterials.biologicalAge,
+                    ageUnit: biomaterials.organismAgeUnit,
+                    sex: biomaterials.biologicalSex,
+                    diseased: biomaterials.biomaterialDisease
                 };
             });
         });

@@ -6,12 +6,14 @@
  */
 
 export interface FileSummary {
+    biomaterialCount: number; /* HCA Specific */
     bodyPartsCounts: number;
-    fileCount: number;
-    totalFileSize: number;
-    sampleCount: number;
     donorCount: number;
-    projectCount: number;
-    primarySiteCount: number;
+    fileCount: number;
+    organCounts: number; /* HCA Specific */
     primarySite: string|number;
+    primarySiteCount: number;
+    projectCount: number;
+    sampleCount: number;
+    totalFileSize: number;
 }

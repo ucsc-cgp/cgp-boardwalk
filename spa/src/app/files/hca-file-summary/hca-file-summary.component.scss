@@ -33,13 +33,13 @@
                 padding: 0;
             }
 
-            &.body-part {
+            &.organ-count {
                 &:before {
                     content: "\E84E";
                 }
             }
             
-            &.donor {
+            &.biomaterial-count {
                 
                 &:before {
                     content: "\E8C3";

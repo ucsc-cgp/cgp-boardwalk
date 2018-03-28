@@ -290,7 +290,7 @@ class TableElementDataSource extends DataSource<any> {
                     organPart: biomaterials.biomaterialOrganPart,
                     libraryConstruction: processes.libraryConstructionApproach,
                     species: biomaterials.biomaterialGenusSpecies[0],
-                    age: biomaterials.biologicalAge,
+                    age: biomaterials.organismAge,
                     ageUnit: biomaterials.organismAgeUnit,
                     sex: biomaterials.biologicalSex,
                     diseased: biomaterials.biomaterialDisease

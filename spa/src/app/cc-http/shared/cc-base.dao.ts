@@ -11,6 +11,7 @@ import * as _ from "lodash";
 // App dependencies
 import { CONFLICT, NO_CONTENT } from "./http-response-status";
 import { ConflictError } from "./error";
+import "rxjs/add/operator/retry";
 
 /**
  * Base DAO (service) for handing, formatting and parsing HTTP requests/responses.
@@ -56,13 +57,8 @@ export class CCBaseDAO {
      * @param queryStringParams {any}
      * @returns {Observable<T>}
      */
-    public get<T>(url: string, queryStringParams?: any): Observable<T> {
+    public get<T>(url: string, queryStringParams?: any, retry = 0): Observable<T> {
 
-        return this.getNoCatch(url, queryStringParams)
-            .catch(response => this.handleError(response));
-    }
-
-    public getNoCatch<T>(url: string, queryStringParams?: any): Observable<T> {
         // Build up GET headers
         let headers = new Headers();
         this.addAcceptHeader(headers);
@@ -84,7 +80,9 @@ export class CCBaseDAO {
 
         return <Observable<T>>this.http // TODO revisit typing here...
             .get(url, requestOptions)
-            .map(response => this.toJSON(response));
+            .map(response => this.toJSON(response))
+            .retry(retry)
+            .catch(response => this.handleError(response));
     }
 
     /**
@@ -128,11 +126,20 @@ export class CCBaseDAO {
         // TODO conflict here with session timeout vs invalid login - disabled this to enable handling of 401 on
         // invalid login in LoginComponent if ( response.status === UNAUTHORIZED ) { window.location.reload(); }
 
+        let body;
+        try {
+            body = response.json();
+        }
+        catch (ex) {
+            // If you get a 401 with FireCloud API, response body is text/html, regardless of the
+            // request's Accept header value.
+            body = response.statusText;
+        }
         if (response.status === CONFLICT) {
-            return Observable.throw(new ConflictError(response.json()));
+            return Observable.throw(new ConflictError(body));
         }
 
-        return Observable.throw(response.json());
+        return Observable.throw(body);
     }
 
     /**

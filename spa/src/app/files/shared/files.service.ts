@@ -27,11 +27,7 @@ export class FilesService {
 
     public exportToFireCloud(selectedFacets: FileFacet[], workspaceName: string, workspaceNamespace: string): Observable<string> {
 
-        return this.fileDAO.exportToFireCloud(selectedFacets, workspaceName, workspaceNamespace)
-            .catch(err => {
-                const message = err.statusText || "Unknown error";
-                return Observable.of(`Error: ${message}`);
-            });
+        return this.fileDAO.exportToFireCloud(selectedFacets, workspaceName, workspaceNamespace);
     }
 
     /**

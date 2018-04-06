@@ -25,6 +25,7 @@ import { ConfigService } from "../../config/config.service";
 import { TableModel } from "../table/table.model";
 import { PaginationModel } from "../table/pagination.model";
 import { TableParamsModel } from "../table/table-params.model";
+import "rxjs/add/operator/delay";
 
 @Injectable()
 export class FilesDAO extends CCBaseDAO {
@@ -182,9 +183,9 @@ export class FilesDAO extends CCBaseDAO {
         const query = new ICGCQuery(this.facetsToQueryString(selectedFacets), "tarball");
         const params = Object.assign({"workspace": workspaceName, "namespace": workspaceNamespace}, query);
 
-        const url = this.buildDataUrl(`//export_to_firecloud`);
-        // return Observable.of(`https://portal.firecloud.org/${workspaceNamespace}/${workspaceName}`);
-        return this.getNoCatch(url, params)
+        const url = this.buildDataUrl(`/export_to_firecloud`);
+        // return Observable.of(`https://portal.firecloud.org/${workspaceNamespace}/${workspaceName}`).delay(5000);
+        return this.get(url, params)
             .map(() => {
                 // TODO: Should get this from response
                 return `https://portal.firecloud.org/#workspaces/${workspaceNamespace}/${workspaceName}`;

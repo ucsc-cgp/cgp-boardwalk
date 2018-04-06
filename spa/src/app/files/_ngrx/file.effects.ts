@@ -18,11 +18,9 @@ import "rxjs/add/observable/concat";
 import "rxjs/add/observable/of";
 import "rxjs/add/operator/withLatestFrom";
 import * as _ from "lodash";
-
 // App dependencies
 import { FilesService } from "../shared/files.service";
 import { FileSummary } from "../file-summary/file-summary";
-import { FileFacetMetadata } from "../file-facet-metadata/file-facet-metadata.model";
 import {
     FetchFileFacetsRequestAction,
     FetchFileFacetsSuccessAction,
@@ -43,15 +41,12 @@ import {
 } from "app/files/_ngrx/file.selectors";
 import { AppState } from "../../_ngrx/app.state";
 import {
-    FetchInitialTableDataRequestAction, FetchPagedOrSortedTableDataRequestAction,
+    FetchInitialTableDataRequestAction,
+    FetchPagedOrSortedTableDataRequestAction,
     FetchTableDataSuccessAction
 } from "./table/table.actions";
 import { TableModel } from "../table/table.model";
 import { DEFAULT_TABLE_PARAMS } from "../table/table-params.model";
-import {
-    FileExportManifestRequestAction, FileExportManifestErrorAction,
-    FileExportManifestSuccessAction
-} from "./file-export/file-export.actions";
 
 @Injectable()
 export class FileEffects {
@@ -192,22 +187,6 @@ export class FileEffects {
         })
         .switchMap((query) => {
             return this.fileService.downloadFileManifest(query);
-        });
-
-    @Effect()
-    exportToFireCloud$: Observable<Action> = this.actions$
-        .ofType<FileExportManifestRequestAction>(FileExportManifestRequestAction.ACTION_TYPE)
-        .map(action => action.payload)
-        .withLatestFrom(this.store.select(selectSelectedFileFacets))
-        .switchMap((results) => {
-            const [payload, selectedFacets] = results;
-            return this.fileService.exportToFireCloud(selectedFacets, payload.name, payload.namespace);
-        })
-        .map((fcUrl) => {
-            if (fcUrl.startsWith("Error")) {
-                return new FileExportManifestErrorAction(fcUrl);
-            }
-            return new FileExportManifestSuccessAction(fcUrl);
         });
 
     private colorWheel: Map<string, string>;

@@ -32,7 +32,7 @@ export class TableComponent implements OnInit {
     displayedColumns = [
         "program", "project", "submittedDonorId",
         "submittedSpecimenId", "specimen_type", "submittedSampleId",
-        "software", "title", "file_id", "fileSize"
+        "software", "title", "dos_uri", "fileSize"
     ];
     tableElementDataSource: TableElementDataSource;
     pagination$: Observable<PaginationModel>;
@@ -261,7 +261,7 @@ export interface Element {
     sample: string;
     workflow: string;
     title: string;
-    file_id: string;
+    dos_uri: string;
     size: number;
 }
 
@@ -292,7 +292,7 @@ class TableElementDataSource extends DataSource<any> {
                     sample: row.donors[0].submittedSampleId,
                     workflow: row.analysisMethod.software,
                     title: row.fileCopies[0].fileName,
-                    file_id: row.id,
+                    dos_uri: row.fileCopies[0].dosUri,
                     size: row.fileCopies[0].fileSize
                 };
             });

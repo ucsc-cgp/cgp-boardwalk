@@ -12,7 +12,6 @@ import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { FileSummaryState } from "./file-summary/file-summary.state";
 import { FileFacetListState } from "./file-facet-list/file-facet-list.state";
 import { FileFacetMetadataSummaryState } from "./file-facet-metadata-summary/file-facet-metadata-summary.state";
-import { FileExportManifestState } from "./file-export/file-export.state";
 import { TableState } from "./table/table.state";
 
 export const selectFileFacets = createFeatureSelector<FileFacetListState>("fileFacetList");
@@ -50,6 +49,4 @@ export const selectTableData = createSelector(
 export const selectTableQueryParams = createSelector(selectSelectedFacetsMap, selectPagination, (selectedFacets, pagination) => {
     return { selectedFacets, pagination };
 });
-
-export const selectExportFileState = createFeatureSelector<FileExportManifestState>("fileExportState");
 

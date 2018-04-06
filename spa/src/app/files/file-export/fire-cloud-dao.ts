@@ -10,27 +10,42 @@ export interface FirecloudNamespace {
     creationStatus: string;
 }
 
+export interface FirecloudWorkspace {
+    accessLevel: "OWNER" | "READER" | "WRITER" | "NO ACCESS";
+    workspace: {
+        name: string;
+        namespace: string;
+    };
+}
+
 @Injectable()
 export class FireCloudDAO extends CCBaseDAO {
-   constructor(http: Http, private configService: ConfigService) {
-       super(http);
-   }
+    constructor(http: Http, private configService: ConfigService) {
+        super(http);
+    }
 
     fetchNamespaces(): Observable<FirecloudNamespace[]> {
         const params = {
             path: "/api/profile/billing"
         };
-        return this.get<FirecloudNamespace[]>(this.buildDataUrl("/proxy_firecloud"), params);
+        return this.get<FirecloudNamespace[]>(this.buildFireCloudProxyUrl(), params, 5);
+    }
+
+    fetchWorkspaces(): Observable<FirecloudWorkspace[]> {
+        const params = {
+            path: "/api/workspaces"
+        };
+        return this.get<FirecloudWorkspace[]>(this.buildFireCloudProxyUrl(), params, 5);
     }
 
     /**
      * Privates
      */
 
-    private buildDataUrl(url: string) {
+    private buildFireCloudProxyUrl() {
 
         const domain = this.configService.getDataURL();
-        return `${domain}${url}`;
+        return `${domain}/proxy_firecloud`;
     }
 
 

@@ -42,6 +42,8 @@ import { FileFacetMenuComponent } from "./file-facet-menu/file-facet-menu.compon
 import { FileFacetSearchComponent } from "./file-facet-search/file-facet-search.component";
 import { FileFacetSearchMenuComponent } from "./file-facet-search-menu/file-facet-search-menu.component";
 import { FileFilterComponent } from "./file-filter/file-filter.component";
+import { FileFilterResultsComponent } from "./file-filter-results/file-filter-results.component";
+import { FileFilterWrapperComponent } from "./file-filter-wrapper/file-filter-wrapper.component";
 import { FileManifestSummaryComponent } from "./file-manifest-summary/file-manifest-summary.component";
 import { FileFacetWrapperComponent } from "./file-facet-wrapper/file-facet-wrapper.component";
 import { routes } from "./files.routes";
@@ -89,6 +91,8 @@ import { TableComponent } from "./table/table.component";
         FacetTermListComponent,
 
         FileFilterComponent,
+        FileFilterResultsComponent,
+        FileFilterWrapperComponent,
 
         FileSummaryComponent,
         FileFacetsComponent,

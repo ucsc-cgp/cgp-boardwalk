@@ -25,14 +25,9 @@ $md-toolbar-height-mobile-landscape: 48px !default;
                 top: ($height); // Single height - for main nav
             }
 
-            /deep/ bw-file-filter {
+            /deep/ bw-file-filter-wrapper {
                 margin-top: ($height);
                 top: 84px; // Sits below bw-file-summary
-
-                /* Search filter input field */
-                .search {
-                    max-width: calc(50% + 8px) !important;
-                }
             }
         }
     }
@@ -69,12 +64,18 @@ $md-toolbar-height-mobile-landscape: 48px !default;
             }
 
             /** Handle snap of file filter element itself */
-            /deep/ bw-file-filter {
+            /deep/ bw-file-filter-wrapper {
                 position: absolute;
                 left: 0;
                 padding: 0; // Remove default padding
                 right: 0;
                 z-index: 10;
+            }
+
+            /* Search filter input field */
+            /deep/ bw-file-filter {
+                max-width: calc(50% - 8px) !important;
+                padding: 0 8px;
             }
         }
     }
@@ -89,8 +90,8 @@ $md-toolbar-height-mobile-landscape: 48px !default;
         &.snap {
 
             /* Search filter input field */
-            /deep/ bw-file-filter mat-card .search {
-                max-width: calc((100% + 16px) / 4 + 8px) !important; // Matches width of facet card
+            /deep/ bw-file-filter {
+                max-width: calc((100% + 16px) / 4 - 8px) !important; // Matches width of facet card
             }
         }
     }
@@ -105,8 +106,8 @@ $md-toolbar-height-mobile-landscape: 48px !default;
         &.snap {
 
             /* Search filter input field */
-            /deep/ bw-file-filter mat-card .search {
-                max-width: calc((100% + 16px) / 5 + 8px) !important; // Matches width of facet card
+            /deep/ bw-file-filter {
+                max-width: calc((100% + 16px) / 5 - 8px) !important; // Matches width of facet card
             }
         }
     }

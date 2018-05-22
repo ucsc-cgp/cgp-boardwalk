@@ -19,7 +19,7 @@ interface FilterableFacet {
 }
 
 /**
- * Component displaying three summary counts: files, donors, and file size.
+ * Component searches facet and term names for filtering.
  */
 @Component({
     selector: "bw-file-filter",
@@ -46,12 +46,8 @@ export class FileFilterComponent implements OnInit, OnChanges {
         this.store = store;
     }
 
-    removeFacet(facetName: string, termName: string) {
-        this.store.dispatch(new SelectFileFacetAction(new FileFacetSelectedEvent(facetName, termName, false)));
-    }
-
     /**
-     * Save rep without surgeon.
+     * Term selected.
      *
      * @param {MatAutocompleteSelectedEvent} event
      */

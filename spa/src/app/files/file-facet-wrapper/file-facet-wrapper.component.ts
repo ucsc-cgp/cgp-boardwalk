@@ -35,7 +35,7 @@ export class FileFacetWrapperComponent implements OnInit {
 
     // Inputs
     @Input() fileFacet: FileFacet;
-    
+
     // View child/ren
     @ViewChild(MatMenuTrigger) termMenuTrigger: MatMenuTrigger;
 

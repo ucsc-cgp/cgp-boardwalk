@@ -1,0 +1,79 @@
+/*!
+ * UCSC Genomics Institute - CGL
+ * https://cgl.genomics.ucsc.edu/
+ *
+ * File filter results styles.
+ */
+@import "../../shared/theme/cgl.vars";
+
+:host {
+    align-items: center;
+    display: flex;
+    flex: 1;
+
+    /* Flex padding */
+    > div {
+        padding: 0;
+
+        > div {
+            padding: 0 8px;
+        }
+
+        /* No terms selected */
+        .no-terms {
+            display: none; /* Hide */
+        }
+    }
+
+    /* Chip */
+    mat-chip {
+        background-color: transparent;
+        margin: 4px !important;
+        position: relative; // Positions close icon
+
+        &:not(.mat-basic-chip):focus {
+            box-shadow: none;
+        }
+
+        /* Term and facet name */
+        > div {
+            display: flex;
+            flex-direction: column;
+            padding-right: 8px;
+
+            /* Facet name */
+            span:last-of-type {
+                margin-top: -4px; // Scoots up underneath term
+            }
+        }
+
+        /* Close icon - hide */
+        mat-icon {
+            display: none;
+        }
+
+        /* Close icon - on hover show */
+        &:hover .mat-icon {
+            display: block;
+            position: absolute;
+            right: 0;
+        }
+    }
+}
+
+/**
+ * Medium +
+ */
+@media (min-width: $md-md-min) {
+
+    :host {
+
+        /* No terms selected */
+        >div .no-terms {
+            display: block; /* Show */
+            padding: 0 24px;
+        }
+    }
+}
+
+

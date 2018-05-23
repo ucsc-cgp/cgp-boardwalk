@@ -52,7 +52,7 @@ $md-toolbar-height-mobile-landscape: 48px !default;
 
         /** Handle snap of results summary - add padding top to host, to allow for snapped results summary. */
         &.snap {
-            padding-top: 100px; // Matches height of results summary + padding (84px + 16px)
+            padding-top: 175px; // Matches height of results summary + padding (84px + 16px + ~75px) // TODO Mim variable height to be implemented
 
             /** Handle snap of results summary element itself */
             /deep/ bw-file-summary {

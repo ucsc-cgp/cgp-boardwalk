@@ -34,10 +34,6 @@
             <mat-header-cell *matHeaderCellDef mat-sort-header> Submitter Sample</mat-header-cell>
             <mat-cell *matCellDef="let element"> {{element.sample}}</mat-cell>
         </ng-container>
-        <ng-container matColumnDef="software">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Work Flow</mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.workflow}}</mat-cell>
-        </ng-container>
         <ng-container matColumnDef="title">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Filename</mat-header-cell>
             <mat-cell *matCellDef="let element"> {{element.title}}</mat-cell>
@@ -45,6 +41,10 @@
         <ng-container matColumnDef="dos_uri">
             <mat-header-cell *matHeaderCellDef mat-sort-header> DOS URI</mat-header-cell>
             <mat-cell *matCellDef="let element"> {{element.dos_uri}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="aliases">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Aliases</mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.aliases}}</mat-cell>
         </ng-container>
         <ng-container matColumnDef="fileSize">
             <mat-header-cell *matHeaderCellDef mat-sort-header> File Size</mat-header-cell>

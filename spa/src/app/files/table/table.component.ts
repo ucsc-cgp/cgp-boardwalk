@@ -32,7 +32,7 @@ export class TableComponent implements OnInit {
     displayedColumns = [
         "program", "project", "submittedDonorId",
         "submittedSpecimenId", "specimen_type", "submittedSampleId",
-        "aliases", "title", "dos_uri", "fileSize"
+        "title", "dos_uri", "aliases", "fileSize"
     ];
     tableElementDataSource: TableElementDataSource;
     pagination$: Observable<PaginationModel>;

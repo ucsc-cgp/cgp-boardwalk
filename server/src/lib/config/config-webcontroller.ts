@@ -23,6 +23,6 @@ import { Response } from "~express/lib/express";
 export function getConfig(req: Req, res: Res): Response {
 
     return setupResponseCallback(res)(null, {
-        dataURL: process.env.BW_DATA_URL || "https://carlos.ucsc-cgp-dev.org"
+        dataURL: process.env.BW_DATA_URL || ""
     } as ConfigViewModel);
 }

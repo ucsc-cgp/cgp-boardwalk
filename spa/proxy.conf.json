@@ -1,6 +1,13 @@
 {
+
+  "/api/v1": {
+    "target": "http://localhost:3001",
+    "secure": false,
+    "debug":true
+  },
   "/api": {
     "target": "http://localhost:3000",
     "secure": false
+
   }
 }

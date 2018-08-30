@@ -1,12 +1,5 @@
 # UCSC Boardwalk
 
-UCSC Boardwalk is a MEAN stack app and uses standard setup/configuration tools (NPM and Grunt).
-
-See the following for more details:
-
-- [http://mean.io](http://mean.io)
-- [https://www.npmjs.org](https://www.npmjs.org)
-- [http://gruntjs.com](http://gruntjs.com)
 
 ## Prerequisites
 UCSC Boardwalk is an [Angular 2 app](http://angular.io), built with the [Angular CLI tool](https://github.com/angular/angular-cli).
@@ -57,17 +50,26 @@ To start Express, run the following from the root directory:
 
 This will run the express server on `http://localhost:3000`
 
-## Run Client-Side Tests
+### 6. Local HTTP-Proxy to Facet Service
 
-Run the following from the `spa` directory:
 
-	npm test
-	
-This will run once through test-suite using PhantomJS. To run through PhantomJS with a file watcher, you can use:
+The URL for the back end Azul Facet Service is configurable from the environment property ```BW_DATA_URL```. This can be set to the url of the server running the back end in the Gruntfile to run locally or on the boardwalk node.js server.
 
-    npm test:headless
+If this value is not set, the Boardwalk Angular client will assume the Facet Server is at the same url that served the front end, and make a relative request to /api/v1 to retrieve the facets and other configuration. 
 
-To run the tests through the browser with a file watcher:
+To support this, on localhost, run the proxy.json file with `node proxy.json` This will start a proxy server at port 3001. ```proxy.conf.json``` in ```/spa``` is configured to forward requests to /api to the local node.js server at port 3000 and to send /api/v1 to requests to the proxy listening at port 3001.
 
-    npm test:browser
+The HTTP-Proxy on port 3001 is configured to send all requests to https://ucsc-cgp.org but this can be chaned as required.
 
+
+``````
+//
+// Create a HTTP Proxy server with a HTTPS target
+//
+httpProxy.createProxyServer({
+    target: 'https://ucsc-cgp.org',
+    agent  : https.globalAgent,
+    headers: {
+        host: 'ucsc-cgp.org'
+    }
+}).listen(3001);

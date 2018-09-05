@@ -25,10 +25,10 @@ console.log(welcome.rainbow.bold);
 // Create a HTTP Proxy server with a HTTPS target
 //
 httpProxy.createProxyServer({
-    target: 'https://ucsc-cgp.org',
+    target: 'https://commons.ucsc-cgp-dev.org',
     agent  : https.globalAgent,
     headers: {
-        host: 'ucsc-cgp.org'
+        host: 'commons.ucsc-cgp-dev.org'
     }
 }).listen(3001);
 

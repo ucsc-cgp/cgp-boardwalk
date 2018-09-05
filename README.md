@@ -59,7 +59,7 @@ If this value is not set, the Boardwalk Angular client will assume the Facet Ser
 
 To support this, on localhost, run the proxy.json file with `node proxy.json` This will start a proxy server at port 3001. ```proxy.conf.json``` in ```/spa``` is configured to forward requests to /api to the local node.js server at port 3000 and to send /api/v1 to requests to the proxy listening at port 3001.
 
-The HTTP-Proxy on port 3001 is configured to send all requests to https://ucsc-cgp.org but this can be chaned as required.
+The HTTP-Proxy on port 3001 is configured to send all requests to https://commons.ucsc-cgp-dev.org but this can be chaned as required.
 
 
 ``````

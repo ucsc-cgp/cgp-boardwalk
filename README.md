@@ -57,9 +57,11 @@ The URL for the back end Azul Facet Service is configurable from the environment
 
 If this value is not set, the Boardwalk Angular client will assume the Facet Server is at the same url that served the front end, and make a relative request to /api/v1 to retrieve the facets and other configuration. 
 
-To support this, on localhost, run the proxy.json file with `node proxy.json` This will start a proxy server at port 3001. ```proxy.conf.json``` in ```/spa``` is configured to forward requests to /api to the local node.js server at port 3000 and to send /api/v1 to requests to the proxy listening at port 3001.
+To support this, on localhost, we run the proxy.js file with `node proxy.js` This will start a proxy server at port 3001. 
 
-The HTTP-Proxy on port 3001 is configured to send all requests to https://commons.ucsc-cgp-dev.org but this can be chaned as required.
+Angular is configured using```proxy.conf.json``` in ```/spa``` to forward requests to /api to the local node.js server at port 3000 and to send /api/v1 to requests to the proxy listening at port 3001. The HTTP-Proxy on port 3001 is configured to send all requests to https://commons.ucsc-cgp-dev.org but this can be chaned as required.
+
+```npm start``` in the /spa directory will launch the http-proxy for you and also start the local Angular dev server.
 
 
 ``````

@@ -9,16 +9,7 @@
                 <a href="{{rootUrl}}/index.html">Home</a>
             </cc-toolbar-nav-item>
             <cc-toolbar-nav-item class="active">
-                <a href="{{rootUrl}}/boardwalk.html">Boardwalk</a>
-            </cc-toolbar-nav-item>
-            <cc-toolbar-nav-item>
-                <a href="https://ucsc-cgl.atlassian.net/wiki/" target="_blank">Wiki</a>
-            </cc-toolbar-nav-item>
-            <cc-toolbar-nav-item>
-                <a href="{{rootUrl}}/about.html">About</a>
-            </cc-toolbar-nav-item>
-            <cc-toolbar-nav-item>
-                <a href="{{rootUrl}}/help.html">Help</a>
+                <a href="{{rootUrl}}/boardwalk.html">Data Browser</a>
             </cc-toolbar-nav-item>
             <cc-toolbar-nav-item *ngIf="(authorizedUser$ | async) as user">
                 <a href="{{rootUrl}}/logout"><img src="{{user.avatar}}" alt="{{user.name}}" height="20" width="20">Logout</a>

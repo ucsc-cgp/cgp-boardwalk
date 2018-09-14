@@ -23,13 +23,8 @@ import { selectFileFacetsFileFacets, selectFileSummary, selectSelectedFileFacets
 import { AppState } from "../_ngrx/app.state";
 import { FetchFileFacetsRequestAction } from "./_ngrx/file-facet-list/file-facet-list.actions";
 import { MatDialog, MatIconRegistry } from "@angular/material";
-import { FileExportComponent } from "./file-export/file-export.component";
-import { FireCloudDAO, FirecloudNamespace, FirecloudWorkspace } from "./file-export/fire-cloud-dao";
-import { CCAlertDialogComponent } from "../shared/cc-alert-dialog/cc-alert-dialog.component";
 import { DomSanitizer } from "@angular/platform-browser";
-import { User } from "../data/user/user.model";
-import { selectAuthenticatedUser } from "../auth/_ngrx/auth.selectors";
-import { forkJoin } from "rxjs/observable/forkJoin";
+import { FileExportManifestRequestAction } from "./_ngrx/file-export/file-export.actions";
 
 @Component({
     selector: "bw-files",
@@ -60,7 +55,6 @@ export class FilesComponent implements OnInit {
     constructor(route: ActivatedRoute,
                 store: Store<AppState>,
                 private dialog: MatDialog,
-                private fireCloudDAO: FireCloudDAO,
                 private iconRegistry: MatIconRegistry,
                 private sanitizer: DomSanitizer) {
 
@@ -92,58 +86,7 @@ export class FilesComponent implements OnInit {
     }
 
     onExportToFireCloud() {
-        if (!this.exportDialogUp) {
-            this.store.select(selectAuthenticatedUser).take(1).subscribe((user: User) => {
-                if (!user || !user.email) {
-                    this.dialog.open(CCAlertDialogComponent, {
-                        data: {
-                            title: "Login Required",
-                            message: "You must be logged in before you can export data to FireCloud."
-                        }
-                    });
-                }
-                else {
-                    this.exportDialogUp = true;
-                    const fetchNamespaces = this.fireCloudDAO.fetchNamespaces();
-                    const fetchWorkspaces = this.fireCloudDAO.fetchWorkspaces();
-                    forkJoin(fetchNamespaces, fetchWorkspaces).subscribe(results => {
-                            const namespaces: FirecloudNamespace[] = results[0];
-                            const workspaces: FirecloudWorkspace[] = results[1];
-                            if (namespaces.length > 0 || workspaces.length > 0) {
-                                const projectNames: string[] = namespaces.map(namespace => namespace.projectName);
-                                const dialogRef = this.dialog.open(FileExportComponent, {
-                                    data: {
-                                        workspace: "",
-                                        namespace: projectNames[0],
-                                        namespaces: projectNames,
-                                        workspaces: workspaces,
-                                        store: this.store
-                                    }
-                                });
-                                dialogRef.afterClosed().subscribe(() => this.exportDialogUp = false);
-                            }
-                            else {
-                                const dialogRef = this.dialog.open(CCAlertDialogComponent, {
-                                    data: {
-                                        title: "Error",
-                                        message: "You do not have any billing projects associated with your FireCloud account. You must have at least one in order to proceed."
-                                    }
-                                });
-                                dialogRef.afterClosed().subscribe(() => this.exportDialogUp = false);
-                            }
-                        },
-                        () => {
-                            const dialogRef = this.dialog.open(CCAlertDialogComponent, {
-                                data: {
-                                    title: "Error",
-                                    message: "There was an error retrieving information from FireCloud. Please try again."
-                                }
-                            });
-                            dialogRef.afterClosed().subscribe(() => this.exportDialogUp = false);
-                        });
-                }
-            });
-        }
+        this.store.dispatch(new FileExportManifestRequestAction());
     }
 
     /**

@@ -52,8 +52,6 @@ import { KeywordsModule } from "../keywords/keywords.module";
 import { FilesDAO } from "./shared/files.dao";
 import { FilesService } from "./shared/files.service";
 import { TableComponent } from "./table/table.component";
-import { FileExportComponent } from "./file-export/file-export.component";
-import { FireCloudDAO } from "./file-export/fire-cloud-dao";
 import { CCAlertDialogComponent } from "../shared/cc-alert-dialog/cc-alert-dialog.component";
 import { HttpClientModule } from "@angular/common/http";
 
@@ -109,17 +107,14 @@ import { HttpClientModule } from "@angular/common/http";
         FileFacetWrapperComponent,
         TableComponent,
 
-        FileNameShortenerPipe,
-        FileExportComponent],
+        FileNameShortenerPipe],
     entryComponents: [
-        FileExportComponent,
         CCAlertDialogComponent
     ],
     providers: [
         ConfigService,
         FilesService,
         FilesDAO,
-        FireCloudDAO,
         {provide: "Window", useValue: window} // Required for hamburger functionality
     ]
 })

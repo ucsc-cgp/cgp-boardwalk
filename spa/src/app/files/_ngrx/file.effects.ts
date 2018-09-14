@@ -47,6 +47,10 @@ import {
 } from "./table/table.actions";
 import { TableModel } from "../table/table.model";
 import { DEFAULT_TABLE_PARAMS } from "../table/table-params.model";
+import {
+    FileExportManifestRequestAction, FileExportManifestErrorAction,
+    FileExportManifestSuccessAction
+} from "./file-export/file-export.actions";
 
 @Injectable()
 export class FileEffects {
@@ -187,6 +191,22 @@ export class FileEffects {
         })
         .switchMap((query) => {
             return this.fileService.downloadFileManifest(query);
+        });
+
+    @Effect()
+    exportToFireCloud$: Observable<Action> = this.actions$
+        .ofType<FileExportManifestRequestAction>(FileExportManifestRequestAction.ACTION_TYPE)
+        .switchMap(() => {
+            return this.store.select(selectSelectedFileFacets);
+        })
+        .switchMap((facets) => {
+            return this.fileService.exportToFireCloud(facets);
+        })
+        .map((success) => {
+            if (!success) {
+                return new FileExportManifestErrorAction("");
+            }
+            return new FileExportManifestSuccessAction("");
         });
 
     private colorWheel: Map<string, string>;

@@ -25,9 +25,9 @@ export class FilesService {
         return this.fileDAO.downloadFileManifest(selectedFacets);
     }
 
-    public exportToFireCloud(selectedFacets: FileFacet[], workspaceName: string, workspaceNamespace: string): Observable<string> {
+    public exportToFireCloud(selectedFacets: FileFacet[]): Observable<boolean> {
 
-        return this.fileDAO.exportToFireCloud(selectedFacets, workspaceName, workspaceNamespace);
+        return this.fileDAO.exportToFireCloud(selectedFacets);
     }
 
     /**

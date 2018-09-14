@@ -27,6 +27,11 @@ import { PaginationModel } from "../table/pagination.model";
 import { TableParamsModel } from "../table/table-params.model";
 import "rxjs/add/operator/delay";
 
+enum ExportFormat {
+    TSV = "tsv",
+    BDBAG = "bdbag"
+}
+
 @Injectable()
 export class FilesDAO extends CCBaseDAO {
 
@@ -179,16 +184,17 @@ export class FilesDAO extends CCBaseDAO {
         return Observable.of(true); // TODO error handling? I'm not sure setting the href causes any errors
     }
 
-    exportToFireCloud(selectedFacets: FileFacet[], workspaceName: string, workspaceNamespace: string): Observable<string> {
-        const query = new ICGCQuery(this.facetsToQueryString(selectedFacets), "tarball");
-        const params = Object.assign({"workspace": workspaceName, "namespace": workspaceNamespace}, query);
+    exportToFireCloud(selectedFacets: FileFacet[]): Observable<boolean> {
+        const query = new ICGCQuery(this.facetsToQueryString(selectedFacets), "bdbag");
+        // Need to open window here, as browser will not let you open it in a callback.
+        const newWindow = window.open("", "_blank");
 
-        const url = this.buildDataUrl(`/export_to_firecloud`);
-        // return Observable.of(`https://portal.firecloud.org/${workspaceNamespace}/${workspaceName}`).delay(5000);
-        return this.get(url, params)
-            .map(() => {
-                // TODO: Should get this from response
-                return `https://portal.firecloud.org/#workspaces/${workspaceNamespace}/${workspaceName}`;
+        const url = this.buildExportUrl(selectedFacets);
+        return this.get(url, query)
+            .map((resp: any) => {
+                const url = `https://bvdp-saturn-prod.appspot.com/#import-data?url=${resp.url}`;
+                newWindow.location.href = url;
+                return true;
             });
     }
 
@@ -214,6 +220,10 @@ export class FilesDAO extends CCBaseDAO {
         return `${domain}${url}`;
     }
 
+    private buildExportUrl(selectedFacets: FileFacet[]) {
+        return this.buildApiUrl(`//repository/files/export`);
+    }
+
     /**
      * Map files API response into FileFacet objects.
      *
@@ -226,7 +236,7 @@ export class FilesDAO extends CCBaseDAO {
 
         // Determine the set of facets that are to be displayed
         const visibleFacets = _.pick(filesAPIResponse.termFacets, ordering.order) as Dictionary<FacetTermsResponse>;
-        ;
+
 
         // Calculate the number of terms to display on each facet card
         const shortListLength = this.calculateShortListLength(visibleFacets);

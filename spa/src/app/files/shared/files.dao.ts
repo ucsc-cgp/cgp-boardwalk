@@ -192,7 +192,8 @@ export class FilesDAO extends CCBaseDAO {
         const url = this.buildExportUrl(selectedFacets);
         return this.get(url, query)
             .map((resp: any) => {
-                const url = `https://bvdp-saturn-prod.appspot.com/#import-data?url=${resp.url}`;
+                const bdbagUrl = encodeURIComponent(resp.url);
+                const url = `https://bvdp-saturn-prod.appspot.com/#import-data?url=${bdbagUrl}`;
                 newWindow.location.href = url;
                 return true;
             });

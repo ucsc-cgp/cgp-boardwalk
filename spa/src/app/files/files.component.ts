@@ -26,7 +26,6 @@ import { MatDialog, MatIconRegistry } from "@angular/material";
 import { DomSanitizer } from "@angular/platform-browser";
 import { FileExportManifestRequestAction } from "./_ngrx/file-export/file-export.actions";
 
-
 @Component({
     selector: "bw-files",
     templateUrl: "files.component.html",

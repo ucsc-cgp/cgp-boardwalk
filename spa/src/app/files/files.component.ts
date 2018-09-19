@@ -26,6 +26,7 @@ import { MatDialog, MatIconRegistry } from "@angular/material";
 import { DomSanitizer } from "@angular/platform-browser";
 import { FileExportManifestRequestAction } from "./_ngrx/file-export/file-export.actions";
 
+
 @Component({
     selector: "bw-files",
     templateUrl: "files.component.html",
@@ -45,7 +46,7 @@ export class FilesComponent implements OnInit {
     public fileFacets$: Observable<FileFacet[]>;
 
     public selectedFileFacets$: Observable<FileFacet[]>;
-    public exportManifest$: Observable<FileExportManifestState>;
+
 
 
     /**

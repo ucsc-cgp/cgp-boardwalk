@@ -19,5 +19,4 @@ RUN rm -rf spa/node_modules
 EXPOSE 3000
 #Set the node env
 ENV NODE_ENV local
-ENV BW_DATA_URL https://ucsc-cgp.org
 CMD ["pm2-docker", "server/dist/server.js"]

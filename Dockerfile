@@ -1,4 +1,6 @@
 FROM node:6
+RUN apt-get update
+RUN apt-get -y upgrade
 # Create app directory
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app

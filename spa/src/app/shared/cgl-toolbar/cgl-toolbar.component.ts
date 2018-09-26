@@ -48,7 +48,7 @@ export class CGLToolbarComponent {
         });
 
         this.hasRedwoodToken$ = this.authorizedUser$.map((user: User) => {
-            return user && user.redwood_token !== "None";
+            return false;
         });
 
         this.rootUrl = this.configService.getDataURL();

@@ -26,4 +26,4 @@ export const selectAuthenticatedUser = createSelector(selectAuth, (state: AuthSt
  *
  * @type {MemoizedSelector<Object, string>}
  */
-export const selectRedwoodToken = createSelector(selectAuthenticatedUser, (user: User) => user.redwood_token);
+export const selectRedwoodToken = createSelector(selectAuthenticatedUser, (user: User) => null);

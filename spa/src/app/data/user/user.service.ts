@@ -17,7 +17,7 @@ export class UserService extends CCBaseDAO {
      * @returns {Observable<User>}
      */
     syncSession(): Observable<User> {
-        return this.get(`/api/session`);
+        return this.get(`/me`);
     }
 
     /**

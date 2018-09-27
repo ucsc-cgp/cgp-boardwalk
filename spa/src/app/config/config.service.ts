@@ -21,7 +21,7 @@ import { FetchConfigRequestSuccessAction } from "./_ngrx/config.actions";
 
 @Injectable()
 export class ConfigService {
-    
+
     // Locals
     private configDAO: ConfigDAO;
     private dataURL: string; // Pulled from config store, saved as local state here on service
@@ -32,7 +32,7 @@ export class ConfigService {
      * @param store {Store<AppState>}
      */
     constructor(configDAO: ConfigDAO, store: Store<AppState>) {
-        
+
         this.configDAO = configDAO;
         this.store = store;
     }
@@ -41,9 +41,9 @@ export class ConfigService {
      * Hit API end point to retrieve configuration information for this Boardwalk instance. Must return promise here
      * as this method is called during Angular's app initialization and we need to resolve the config details (eg
      * data URL) before any components are instantiated. The config details returned from the server are saved on
-     * this config service as local state (for easy access from calling classes where we don't want to handle 
+     * this config service as local state (for easy access from calling classes where we don't want to handle
      * Observables) as well as in the store.
-     * 
+     *
      * Note: if we add a fetch method at a later stage (eg to retrieve updated config), the local data URL value on this
      * service must be updated as well as the value in the store.
      *
@@ -60,17 +60,17 @@ export class ConfigService {
 
     /**
      * Return the data URL for this Boardwalk instance.
-     * 
+     *
      * @returns {string}
      */
     public getDataURL(): string {
-        
+
         return this.dataURL;
     }
 
     /**
      * Return the full data API URL for this Boardwalk instance.
-     * 
+     *
      * @returns {string}
      */
     public getAPIURL(): string {
@@ -80,11 +80,11 @@ export class ConfigService {
 
     /**
      * Save the data URL as a local variable on this instance, and update the corresponding config value in the store.
-     * 
+     *
      * @param config {Config}
      */
     private storeConfig(config: Config): void {
-        
+
         this.dataURL = config.dataURL;
         this.store.dispatch(new FetchConfigRequestSuccessAction(config));
     }

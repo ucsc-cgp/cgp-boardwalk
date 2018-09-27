@@ -2,7 +2,7 @@
  * UCSC Genomics Institute - CGL
  * https://cgl.genomics.ucsc.edu/
  *
- * State containing information (config) required for setting up this instance of Boardwalk. 
+ * State containing information (config) required for setting up this instance of Boardwalk.
  */
 
 // App dependencies

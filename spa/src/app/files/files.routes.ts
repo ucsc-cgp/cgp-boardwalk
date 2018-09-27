@@ -1,6 +1,16 @@
+/**
+ * UCSC Genomics Institute - CGL
+ * https://cgl.genomics.ucsc.edu/
+ *
+ * File-related routes used by Boardwalk.
+ */
+
+// Core dependencies
 import { Route } from "@angular/router";
-import { FilesComponent } from "./files.component";
+
+// App dependencies
 import { LoginComponent } from "../auth/login/login.component";
+import { FilesComponent } from "./files.component";
 
 export const routes: Route[] = [
     {

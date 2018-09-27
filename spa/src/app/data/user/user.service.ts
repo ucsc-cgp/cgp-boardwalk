@@ -1,14 +1,37 @@
+/**
+ * UCSC Genomics Institute - CGL
+ * https://cgl.genomics.ucsc.edu/
+ *
+ * Data Access Object for hitting user-related API end points.
+ */
+
+// Core dependencies
 import { Injectable } from "@angular/core";
-import { Http } from "@angular/http";
-import { CCBaseDAO } from "../../cc-http/shared/cc-base.dao";
-import { User } from "./user.model";
 import { Observable } from "rxjs/Observable";
 
-@Injectable()
-export class UserService extends CCBaseDAO {
+// App dependencies
+import { User } from "./user.model";
+import { HttpClient } from "@angular/common/http";
 
-    constructor(http: Http) {
-        super(http);
+@Injectable()
+export class UserService {
+
+    /**
+     * @param {HttpClient} httpClient
+     */
+    constructor(private httpClient: HttpClient) {
+    }
+
+    /**
+     * Download Redwood token
+     *
+     * @returns {Observable<void>}
+     */
+    public downloadRedwoodToken(): Observable<boolean> {
+
+        window.location.href = `/api/user/redwood-token`;
+        // return this.get(`/api/user/redwood-token`);
+        return Observable.of(true);
     }
 
     /**
@@ -16,18 +39,8 @@ export class UserService extends CCBaseDAO {
      *
      * @returns {Observable<User>}
      */
-    syncSession(): Observable<User> {
-        return this.get(`/me`);
-    }
+    public syncSession(): Observable<User> {
 
-    /**
-     * Download Redwood Token
-     *
-     * @returns {Observable<void>}
-     */
-    downloadRedwoodToken(): Observable<boolean> {
-        window.location.href = `/api/user/redwood-token`;
-        // return this.get(`/api/user/redwood-token`);
-        return Observable.of(true);
+        return this.httpClient.get<User>(`/me`);
     }
 }

@@ -85,30 +85,11 @@ export class FilesComponent implements OnInit {
         this.store.dispatch(new DownloadFileManifestAction());
     }
 
-    onExportToFireCloud() {
+    /**
+     * Dispatch action to export manifest to FireCloud.
+     */
+    public onExportToFireCloud() {
         this.store.dispatch(new FileExportManifestRequestAction());
-    }
-
-    /**
-     * Life cycle hooks
-     */
-
-    /**
-     * Set up selectors and request initial data set.
-     */
-    public ngOnInit() {
-
-        // File Summary
-        this.selectFileSummary$ = this.store.select(selectFileSummary);
-
-        // File Facets
-        this.fileFacets$ = this.store.select(selectFileFacetsFileFacets);
-
-        this.selectedFileFacets$ = this.store.select(selectSelectedFileFacets);
-
-        // Initialize the filter state from the params in the route.
-        this.initQueryParams();
-
     }
 
     /**
@@ -133,9 +114,29 @@ export class FilesComponent implements OnInit {
                 }
             })
             .subscribe((query) => {
-                    // this currently kicks off the browser data load
+                // this currently kicks off the browser data load
                 this.store.dispatch(new FetchFileFacetsRequestAction());
             });
     }
 
+    /**
+     * Life cycle hooks
+     */
+
+    /**
+     * Set up selectors and request initial data set.
+     */
+    public ngOnInit() {
+
+        // File Summary
+        this.selectFileSummary$ = this.store.select(selectFileSummary);
+
+        // File Facets
+        this.fileFacets$ = this.store.select(selectFileFacetsFileFacets);
+
+        this.selectedFileFacets$ = this.store.select(selectSelectedFileFacets);
+
+        // Initialize the filter state from the params in the route.
+        this.initQueryParams();
+    }
 }

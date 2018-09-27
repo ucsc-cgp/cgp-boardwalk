@@ -7,17 +7,19 @@
 
 // Core dependencies
 import { Injectable } from "@angular/core";
+import * as _ from "lodash";
 import { Actions, Effect } from "@ngrx/effects";
 import { Action, Store } from "@ngrx/store";
 import { Observable } from "rxjs/Observable";
+import "rxjs/add/operator/catch";
+import "rxjs/add/operator/combineLatest";
+import "rxjs/add/observable/concat";
+import "rxjs/add/operator/first";
+import "rxjs/add/observable/of";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/switchMap";
-import "rxjs/add/operator/combineLatest";
-import "rxjs/add/operator/first";
-import "rxjs/add/observable/concat";
-import "rxjs/add/observable/of";
 import "rxjs/add/operator/withLatestFrom";
-import * as _ from "lodash";
+
 // App dependencies
 import { FilesService } from "../shared/files.service";
 import { FileSummary } from "../file-summary/file-summary";

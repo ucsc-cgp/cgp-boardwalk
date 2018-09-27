@@ -6,10 +6,12 @@
  */
 
 // Core dependencies
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Router } from "@angular/router";
+import "rxjs/add/operator/catch";
 import { Observable } from "rxjs/Observable";
+import "rxjs/observable/throw";
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {

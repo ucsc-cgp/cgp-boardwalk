@@ -35,6 +35,8 @@ import { CGLSubnavComponent } from "./shared/cgl-subnav/cgl-subnav.component";
 import { CGLToolbarComponent } from "./shared/cgl-toolbar/cgl-toolbar.component";
 import { ConfigService } from "./config/config.service";
 import { CCAlertDialogComponent } from "./shared/cc-alert-dialog/cc-alert-dialog.component";
+import { LoginComponent } from "./auth/login/login.component";
+
 
 @NgModule({
     bootstrap: [AppComponent],
@@ -75,6 +77,7 @@ import { CCAlertDialogComponent } from "./shared/cc-alert-dialog/cc-alert-dialog
         CGLSubnavComponent,
         CGLToolbarComponent,
         CCAlertDialogComponent,
+        LoginComponent,
     ],
     providers: [
         UserService,

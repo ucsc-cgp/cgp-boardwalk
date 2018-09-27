@@ -105,7 +105,10 @@ export class FileEffects {
             return this.store.select(selectSelectedFileFacets).first();
         })
         .switchMap((selectedFacets) => {
-            return this.fileService.fetchFileSummary(selectedFacets);
+            return this.fileService.fetchFileSummary(selectedFacets).catch((e) => {
+                console.log(e);
+                return new Observable<FileSummary>();
+            });
         })
         .map((fileSummary: FileSummary) => {
 

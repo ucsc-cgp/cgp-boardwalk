@@ -7,7 +7,6 @@ import "rxjs/add/operator/catch";
 import "rxjs/add/operator/map";
 import "rxjs/add/observable/throw";
 import * as _ from "lodash";
-
 // App dependencies
 import { CONFLICT, NO_CONTENT } from "./http-response-status";
 import { ConflictError } from "./error";
@@ -80,7 +79,10 @@ export class CCBaseDAO {
         return <Observable<T>>this.http // TODO revisit typing here...
             .get(url, requestOptions)
             .map(response => this.toJSON(response))
-            .catch(response => this.handleError(response));
+            .catch((response) => {
+                    return this.handleError(response);
+                }
+            );
     }
 
     /**
@@ -110,7 +112,9 @@ export class CCBaseDAO {
         return this.http
             .put(url, form)
             .map(response => this.toJSON(response))
-            .catch(response => this.handleError(response));
+            .catch(
+                response => this.handleError(response)
+            );
     }
 
     /**
@@ -128,7 +132,7 @@ export class CCBaseDAO {
             return Observable.throw(new ConflictError(response.json()));
         }
 
-        return Observable.throw(response.json());
+        return Observable.throw(this.toJSON(response));
     }
 
     /**
@@ -139,10 +143,21 @@ export class CCBaseDAO {
      */
     public toJSON(response: Response): any {
 
+        let json;
+
         if (response.status === NO_CONTENT) {
-            return {};
+            json = {};
         }
-        return response.json();
+        try {
+            json = response.json();
+        }
+        catch (error) {
+            json = {
+                text: response.text()
+            };
+        }
+
+        return json;
     }
 
     /**

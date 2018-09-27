@@ -99,6 +99,7 @@ module.exports = function (grunt) {
                 //BW_DATA_URL: "https://dss-aws-staging.ucsc-cgp-dev.org"
                // BW_DATA_URL: "https://carlos.ucsc-cgp-dev.org"
                 //BW_DATA_URL: "https://ucsc-cgp.org"
+                //BW_DATA_URL: "https://jesse.ucsc-cgp-dev.org/"
             }
         },
 

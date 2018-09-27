@@ -95,7 +95,7 @@ export class FilesDAO extends CCBaseDAO {
 
         const query = new ICGCQuery(this.facetsToQueryString(selectedFacets));
 
-        const url = this.buildApiUrl(`/repository/files`);
+        const url = this.buildApiUrl(`/repository/files/`);
         let filterParams = Object.assign({ from: tableParams.from, size: tableParams.size }, query);
         if (tableParams.sort && tableParams.order) {
             filterParams = Object.assign(filterParams, { sort: tableParams.sort, order: tableParams.order });
@@ -222,7 +222,7 @@ export class FilesDAO extends CCBaseDAO {
     }
 
     private buildExportUrl(selectedFacets: FileFacet[]) {
-        return this.buildApiUrl(`//repository/files/export`);
+        return this.buildApiUrl(`/repository/files/export`);
     }
 
     /**

@@ -20,7 +20,7 @@ import { AppState } from "./_ngrx/app.state";
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-    private sessionPoller: any;
+  //  private sessionPoller: any;
 
     /**
      * @param {Store<AppState>} store
@@ -38,15 +38,15 @@ export class AppComponent implements OnInit, OnDestroy {
         
         // Check authentication status of current user
         this.store.dispatch(new SyncSessionRequestAction());
-        this.sessionPoller = setInterval(() => {
-            this.store.dispatch(new SyncSessionRequestAction());
-        }, 60 * 1000);
+        // this.sessionPoller = setInterval(() => {
+        //     this.store.dispatch(new SyncSessionRequestAction());
+        // }, 60 * 1000);
     }
 
     /**
      * Clean up session check.
      */
     ngOnDestroy() {
-        clearInterval(this.sessionPoller);
+      // clearInterval(this.sessionPoller);
     }
 }

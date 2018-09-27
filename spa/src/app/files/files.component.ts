@@ -133,6 +133,7 @@ export class FilesComponent implements OnInit {
                 }
             })
             .subscribe((query) => {
+                    // this currently kicks off the browser data load
                 this.store.dispatch(new FetchFileFacetsRequestAction());
             });
     }

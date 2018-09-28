@@ -2,29 +2,29 @@
  * UCSC Genomics Institute - CGL
  * https://cgl.genomics.ucsc.edu/
  *
- * Core files component, displays results summary as well as facets.
+ * Core files component, displays results summary, facets and †he current set of facet filters.
  */
 
 // Core dependencies
 import { Component, OnInit } from "@angular/core";
+import { MatDialog, MatIconRegistry } from "@angular/material";
+import { DomSanitizer } from "@angular/platform-browser";
 import { ActivatedRoute } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/map";
-// App dependencies
-import { FileFacet } from "./shared/file-facet.model";
-import { FileSummary } from "./file-summary/file-summary";
+import "rxjs/add/operator/skip";
 
+// App dependencies
+import { AppState } from "../_ngrx/app.state";
+import { FileExportManifestRequestAction } from "./_ngrx/file-export/file-export.actions";
+import { FetchFileFacetsRequestAction } from "./_ngrx/file-facet-list/file-facet-list.actions";
+import { selectFileFacetsFileFacets, selectFileSummary, selectSelectedFileFacets } from "./_ngrx/file.selectors";
 import {
     DownloadFileManifestAction,
     FetchFileManifestSummaryRequestAction
 } from "./_ngrx/file-manifest-summary/file-manifest-summary.actions";
-import { selectFileFacetsFileFacets, selectFileSummary, selectSelectedFileFacets } from "./_ngrx/file.selectors";
-import { AppState } from "../_ngrx/app.state";
-import { FetchFileFacetsRequestAction } from "./_ngrx/file-facet-list/file-facet-list.actions";
-import { MatDialog, MatIconRegistry } from "@angular/material";
-import { DomSanitizer } from "@angular/platform-browser";
-import { FileExportManifestRequestAction } from "./_ngrx/file-export/file-export.actions";
+import { FilesComponentState } from "./files.component-state";
 
 @Component({
     selector: "bw-files",
@@ -33,36 +33,24 @@ import { FileExportManifestRequestAction } from "./_ngrx/file-export/file-export
 })
 export class FilesComponent implements OnInit {
 
-    // Locals
-    private route: ActivatedRoute;
-    private store: Store<AppState>;
-
-    private exportDialogUp = false;
-    private authenticated = false;
-
-    // Public variables
-    public selectFileSummary$: Observable<FileSummary>;
-    public fileFacets$: Observable<FileFacet[]>;
-
-    public selectedFileFacets$: Observable<FileFacet[]>;
-
-
+    // Public/template variables
+    public state$: Observable<FilesComponentState>;
 
     /**
      * @param route {ActivatedRoute}
      * @param store {Store<AppState>}
+     * @param {MatDialog} dialog
+     * @param {MatIconRegistry} iconRegistry
+     * @param {DomSanitizer} sanitizer
      */
-    constructor(route: ActivatedRoute,
-                store: Store<AppState>,
+    constructor(private route: ActivatedRoute,
+                private store: Store<AppState>,
                 private dialog: MatDialog,
                 private iconRegistry: MatIconRegistry,
                 private sanitizer: DomSanitizer) {
 
-        this.route = route;
-        this.store = store;
         iconRegistry.addSvgIcon("firecloud",
             sanitizer.bypassSecurityTrustResourceUrl("/assets/images/thirdparty/FireCloud-white-icon.svg"));
-
     }
 
     /**
@@ -82,6 +70,7 @@ export class FilesComponent implements OnInit {
      * Dispatch action to download manifest summary.
      */
     public onDownloadManifest() {
+
         this.store.dispatch(new DownloadFileManifestAction());
     }
 
@@ -89,6 +78,7 @@ export class FilesComponent implements OnInit {
      * Dispatch action to export manifest to FireCloud.
      */
     public onExportToFireCloud() {
+
         this.store.dispatch(new FileExportManifestRequestAction());
     }
 
@@ -104,7 +94,7 @@ export class FilesComponent implements OnInit {
         this.route.queryParams
             .map((params) => {
 
-                if (params && params["filters"] && params["filters"].length) {
+                if ( params && params["filters"] && params["filters"].length ) {
                     return {
                         filters: JSON.parse(decodeURIComponent(params["filters"]))
                     };
@@ -128,13 +118,28 @@ export class FilesComponent implements OnInit {
      */
     public ngOnInit() {
 
-        // File Summary
-        this.selectFileSummary$ = this.store.select(selectFileSummary);
+        // Grab the files summary - skip the default value to help prevent visual flash of facet components before
+        // auth has resolved.
+        const selectFileSummary$ = this.store.select(selectFileSummary).skip(1);
 
-        // File Facets
-        this.fileFacets$ = this.store.select(selectFileFacetsFileFacets);
+        // Grab all file facets - skip the default value to help prevent visual flash of facet components before
+        // auth has resolved.
+        const fileFacets$ = this.store.select(selectFileFacetsFileFacets).skip(1);
 
-        this.selectedFileFacets$ = this.store.select(selectSelectedFileFacets);
+        // Grab the selected file facets - we'll display these in the filter bar above the facets - skip the default
+        // value to help prevent visual flash of facet components before auth has resolved.
+        const selectedFileFacets$ = this.store.select(selectSelectedFileFacets).skip(1);
+
+        // Roll the files summary, file facets and selected file facets into a single state observable - we can use
+        // this observable to prevent a visual flash of facet components before auth etc has been resolved.
+        this.state$ = fileFacets$.combineLatest(selectFileSummary$, selectedFileFacets$, (fileFacets, selectFileSummary, selectedFileFacets) => {
+
+            return {
+                fileFacets,
+                selectFileSummary,
+                selectedFileFacets
+            };
+        });
 
         // Initialize the filter state from the params in the route.
         this.initQueryParams();

@@ -11,7 +11,7 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { Router } from "@angular/router";
 import "rxjs/add/operator/catch";
 import { Observable } from "rxjs/Observable";
-import "rxjs/observable/throw";
+import "rxjs/add/observable/throw";
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {

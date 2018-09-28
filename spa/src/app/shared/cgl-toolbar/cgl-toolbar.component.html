@@ -12,7 +12,7 @@
                 <a href="{{rootUrl}}/boardwalk">Data Browser</a>
             </cc-toolbar-nav-item>
             <cc-toolbar-nav-item *ngIf="(authorizedUser$ | async) as user">
-                <a href="{{rootUrl}}/logout"><img src="{{user.avatar}}" alt="{{user.name}}" height="20" width="20">Logout</a>
+                <a href="{{rootUrl}}/logout" class="logout">Mim Hastie<span>Logout</span></a>
             </cc-toolbar-nav-item>
             <cc-toolbar-nav-item *ngIf="!(authorizedUser$ | async)">
                 <a href="{{rootUrl}}/bw-login">Login</a>

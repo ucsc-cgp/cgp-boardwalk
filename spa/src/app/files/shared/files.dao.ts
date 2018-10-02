@@ -50,7 +50,7 @@ export class FilesDAO {
      * @param ordering
      * @returns {Observable<FileFacet[]>}
      */
-    fetchFileFacets(selectedFacetsByName: Map<string, FileFacet>, ordering): Observable<FileFacet[]> {
+    public fetchFileFacets(selectedFacetsByName: Map<string, FileFacet>, ordering): Observable<FileFacet[]> {
 
         // Build the API URL
         const url = this.buildApiUrl(`/repository/files`);
@@ -282,7 +282,6 @@ export class FilesDAO {
 
         // Determine the set of facets that are to be displayed
         const visibleFacets = _.pick(filesAPIResponse.termFacets, ordering.order) as Dictionary<FacetTermsResponse>;
-
 
         // Calculate the number of terms to display on each facet card
         const shortListLength = this.calculateShortListLength(visibleFacets);

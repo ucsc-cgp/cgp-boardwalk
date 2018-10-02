@@ -22,6 +22,7 @@ import { AppComponent } from "./app.component";
 import { AppRoutes } from "./app.routes";
 import { ErrorInterceptor } from "./auth/error.interceptor";
 import { LoginComponent } from "./auth/login/login.component";
+import { RegisterComponent } from "./auth/register/register.component";
 import { ConfigModule } from "./config/config.module";
 import { CCSnapperModule } from "./cc-snapper/cc-snapper.module";
 import { UserService } from "./data/user/user.service";
@@ -80,6 +81,7 @@ import { CCAlertDialogComponent } from "./shared/cc-alert-dialog/cc-alert-dialog
         CGLToolbarComponent,
         CCAlertDialogComponent,
         LoginComponent,
+        RegisterComponent
     ],
     providers: [
         UserService,

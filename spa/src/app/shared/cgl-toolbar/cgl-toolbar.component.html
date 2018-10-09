@@ -15,7 +15,7 @@
                 <a href="{{rootUrl}}/logout" class="logout">{{user.name}}<span>Logout</span></a>
             </cc-toolbar-nav-item>
             <cc-toolbar-nav-item *ngIf="!(authorizedUser$ | async)">
-                <a href="{{rootUrl}}/authenticate">Login</a>
+                <a href="{{rootUrl}}/login">Login</a>
             </cc-toolbar-nav-item>
         </cc-toolbar-nav>
     </mat-toolbar-row>

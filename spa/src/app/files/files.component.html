@@ -1,10 +1,10 @@
-<div class="layout-column layout-padding">
-    <bw-file-summary [summary]="selectFileSummary$ | async"></bw-file-summary>
+<div class="layout-column layout-padding" *ngIf="state$ | async as state">
+    <bw-file-summary [summary]="state.selectFileSummary "></bw-file-summary>
     <bw-file-filter-wrapper
-            [selectedFacets]="selectedFileFacets$ | async"
-            [fileFacets]="fileFacets$ | async">
+            [selectedFacets]="state.selectedFileFacets"
+            [fileFacets]="state.fileFacets">
     </bw-file-filter-wrapper>
-    <bw-file-facets [fileFacets]="fileFacets$ | async">
+    <bw-file-facets [fileFacets]="state.fileFacets">
     </bw-file-facets>
     <button class="cgl-fab"
             mat-fab

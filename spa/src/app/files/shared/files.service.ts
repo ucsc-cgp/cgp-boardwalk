@@ -60,8 +60,8 @@ export class FilesService {
      * @returns {Observable<Action>}
      */
     public fetchFileSummary(selectedFacets: FileFacet[]): Observable<FileSummary> {
-        return this.fileDAO
-            .fetchFileSummary(selectedFacets);
+
+        return this.fileDAO.fetchFileSummary(selectedFacets);
     }
 
     /**
@@ -72,8 +72,7 @@ export class FilesService {
      */
     public fetchFileManifestSummary(selectedFacets: FileFacet[]): Observable<Dictionary<FileManifestSummary>> {
 
-        return this.fileDAO
-            .fetchFileManifestSummary(selectedFacets);
+        return this.fileDAO.fetchFileManifestSummary(selectedFacets);
     }
 
 }

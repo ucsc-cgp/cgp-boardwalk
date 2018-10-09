@@ -54,11 +54,11 @@ export class FileFacetWrapperComponent implements OnInit {
 
     /**
      * Returns true if there are more than 10 terms for this facet. Otherwise, false.
-     * 
+     *
      * @returns {boolean}
      */
     public isDisplayTermMenu(): boolean {
-        
+
         return !this.fileFacet.isTermListShort();
     }
 
@@ -78,7 +78,7 @@ export class FileFacetWrapperComponent implements OnInit {
      * Set up initial state of component.
      */
     ngOnInit() {
-        
+
         // No setup required if menu does not exist for this facet (ie, if facet has 10 or less terms)
         if ( !this.termMenuTrigger ) {
             return;

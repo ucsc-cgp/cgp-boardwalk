@@ -6,25 +6,22 @@
  */
 
 // Core dependencies
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Http } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 
 // App dependencies
-import { CCBaseDAO } from "../../cc-http/shared/cc-base.dao";
 import { ConfigService } from "../../config/config.service";
 import { KeywordQueryResponse } from "./keyword-query-response.model";
 
 @Injectable()
-export class KeywordsDAO extends CCBaseDAO {
+export class KeywordsDAO  {
 
     /**
-     * @param {Http} http
      * @param {ConfigService} configService
+     * @param {HttpClient} httpClient
      */
-    constructor(http: Http, private configService: ConfigService) {
-        super(http);
-    }
+    constructor(private configService: ConfigService, private httpClient: HttpClient) {}
 
     /**
      * Search Keywords
@@ -32,9 +29,18 @@ export class KeywordsDAO extends CCBaseDAO {
      * @param {Object} query
      * @returns {Observable<KeywordQueryResponse>}
      */
-    searchKeywords(query: Object): Observable<KeywordQueryResponse> {
+    public searchKeywords(query: Object): Observable<KeywordQueryResponse> {
+
+        // Build API URL
         const url = this.buildApiUrl("/keywords");
-        return this.get(url, query);
+
+        // Build up query params
+        const params = new HttpParams()
+            .set("q", query["q"])
+            .set("from", query["from"])
+            .set("size", query["size"])
+            .set("type", query["type"]);
+        return this.httpClient.get<KeywordQueryResponse>(url, {params});
     }
 
     /**

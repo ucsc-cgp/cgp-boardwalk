@@ -1,13 +1,14 @@
 /**
  * UCSC Genomics Institute - CGL
  * https://cgl.genomics.ucsc.edu/
- * 
+ *
  * Code app module definition - imports shared and config modules as well as all app specific modules that must either
  * be eager-loaded or contain app-wide singleton services.
  */
 
 // Core dependencies
 import { APP_INITIALIZER, NgModule } from "@angular/core";
+import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterModule } from "@angular/router";
@@ -19,6 +20,9 @@ import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 // App Dependencies
 import { AppComponent } from "./app.component";
 import { AppRoutes } from "./app.routes";
+import { ErrorInterceptor } from "./auth/error.interceptor";
+import { LoginComponent } from "./auth/login/login.component";
+import { RegisterComponent } from "./auth/register/register.component";
 import { ConfigModule } from "./config/config.module";
 import { CCSnapperModule } from "./cc-snapper/cc-snapper.module";
 import { UserService } from "./data/user/user.service";
@@ -35,6 +39,7 @@ import { CGLSubnavComponent } from "./shared/cgl-subnav/cgl-subnav.component";
 import { CGLToolbarComponent } from "./shared/cgl-toolbar/cgl-toolbar.component";
 import { ConfigService } from "./config/config.service";
 import { CCAlertDialogComponent } from "./shared/cc-alert-dialog/cc-alert-dialog.component";
+
 
 @NgModule({
     bootstrap: [AppComponent],
@@ -58,7 +63,7 @@ import { CCAlertDialogComponent } from "./shared/cc-alert-dialog/cc-alert-dialog
         // CHILD MODULES SETUP
         ConfigModule,
         FilesModule,
-     //   TableModule,
+        //   TableModule,
         CCSnapperModule
     ],
     declarations: [
@@ -75,6 +80,8 @@ import { CCAlertDialogComponent } from "./shared/cc-alert-dialog/cc-alert-dialog
         CGLSubnavComponent,
         CGLToolbarComponent,
         CCAlertDialogComponent,
+        LoginComponent,
+        RegisterComponent
     ],
     providers: [
         UserService,
@@ -82,8 +89,17 @@ import { CCAlertDialogComponent } from "./shared/cc-alert-dialog/cc-alert-dialog
         // must return promise to ensure Angular "pauses" until config is resolved from API end point.
         {
             provide: APP_INITIALIZER,
-            useFactory: (configService: ConfigService) => {return () => {return configService.initConfig()}},
+            useFactory: (configService: ConfigService) => {
+                return () => {
+                    return configService.initConfig();
+                };
+            },
             deps: [ConfigService],
+            multi: true
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: ErrorInterceptor,
             multi: true
         }
     ]

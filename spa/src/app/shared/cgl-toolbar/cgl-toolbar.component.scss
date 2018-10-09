@@ -45,6 +45,18 @@ mat-toolbar {
         box-shadow: none;
         color: $cgl-green;
     }
+    
+    /** Logout button */
+    .logout {
+        position: relative;
+        span {
+            bottom: 2px;
+            font-size: 8px;
+            line-height: 1;
+            position: absolute;
+            right: 0;
+        }
+    }
 }
 
 /**

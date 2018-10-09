@@ -7,17 +7,19 @@
 
 // Core dependencies
 import { Injectable } from "@angular/core";
+import * as _ from "lodash";
 import { Actions, Effect } from "@ngrx/effects";
 import { Action, Store } from "@ngrx/store";
 import { Observable } from "rxjs/Observable";
+import "rxjs/add/operator/catch";
+import "rxjs/add/operator/combineLatest";
+import "rxjs/add/observable/concat";
+import "rxjs/add/operator/first";
+import "rxjs/add/observable/of";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/switchMap";
-import "rxjs/add/operator/combineLatest";
-import "rxjs/add/operator/first";
-import "rxjs/add/observable/concat";
-import "rxjs/add/observable/of";
 import "rxjs/add/operator/withLatestFrom";
-import * as _ from "lodash";
+
 // App dependencies
 import { FilesService } from "../shared/files.service";
 import { FileSummary } from "../file-summary/file-summary";
@@ -110,11 +112,11 @@ export class FileEffects {
         .map((fileSummary: FileSummary) => {
 
 
-            if (typeof fileSummary.primarySite === "string") {
+            if ( typeof fileSummary.primarySite === "string" ) {
                 fileSummary.primarySiteCount = 0;
             }
 
-            if (typeof fileSummary.totalFileSize === "string") {
+            if ( typeof fileSummary.totalFileSize === "string" ) {
                 fileSummary.totalFileSize = 0;
             }
 
@@ -153,9 +155,11 @@ export class FileEffects {
             // Reset the pagination but keep the set page size if it was changed.
             let tableParams = Object.assign(
                 DEFAULT_TABLE_PARAMS,
-                {size: tableQueryParams.pagination.size,
-                sort: tableQueryParams.pagination.sort,
-                order: tableQueryParams.pagination.order});
+                {
+                    size: tableQueryParams.pagination.size,
+                    sort: tableQueryParams.pagination.sort,
+                    order: tableQueryParams.pagination.order
+                });
 
             return this.fileService.fetchFileTableData(tableQueryParams.selectedFacets, tableParams);
         })
@@ -183,7 +187,7 @@ export class FileEffects {
      *
      * @type {Observable<Action>}
      */
-    @Effect({ dispatch: false })
+    @Effect({dispatch: false})
     downloadFileManifest$: Observable<Action> = this.actions$
         .ofType(DownloadFileManifestAction.ACTION_TYPE)
         .switchMap(() => {
@@ -203,7 +207,7 @@ export class FileEffects {
             return this.fileService.exportToFireCloud(facets);
         })
         .map((success) => {
-            if (!success) {
+            if ( !success ) {
                 return new FileExportManifestErrorAction("");
             }
             return new FileExportManifestSuccessAction("");
@@ -306,12 +310,12 @@ export class FileEffects {
                     return !!facet;
                 });
 
-                if (!sortOrder || !sortOrder.length) {
+                if ( !sortOrder || !sortOrder.length ) {
                     return fileFacets;
                 }
 
                 let newFileFacets = sortOrder.map((sortName) => {
-                    return _.find(fileFacets, { name: sortName });
+                    return _.find(fileFacets, {name: sortName});
                 });
 
                 // order may contain facets that do not exist so filter out any nulls.

@@ -1,0 +1,17 @@
+/**
+ * UCSC Genomics Institute - CGL
+ * https://cgl.genomics.ucsc.edu/
+ *
+ * Styles for displaying login page.
+ */
+
+@import "../../shared/theme/cgl.vars";
+
+:host {
+    h1 {
+        color: $cgl-peach;
+    }
+    p {
+        max-width: $md-md-min;
+    }
+}

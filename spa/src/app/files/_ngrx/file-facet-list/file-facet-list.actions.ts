@@ -1,7 +1,7 @@
 /**
  * UCSC Genomics Institute - CGL
  * https://cgl.genomics.ucsc.edu/
- * 
+ *
  * File list-related actions.
  */
 

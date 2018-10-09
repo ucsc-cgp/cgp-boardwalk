@@ -13,7 +13,7 @@
             <mat-placeholder>{{fileSearchConfig.placeholder}}</mat-placeholder>
             <input matInput type="text" disabled>
         </mat-form-field>
-        <facet-term-list  *ngIf="!!fileFacet.terms.length"
+        <facet-term-list *ngIf="!!fileFacet.terms.length"
                           [fileFacet]="fileFacet"
                           [useShortList]="true"
                           (facetTermSelected)="onFacetTermSelected($event)"></facet-term-list>

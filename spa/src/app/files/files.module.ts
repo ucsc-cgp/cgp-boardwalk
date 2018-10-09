@@ -6,6 +6,7 @@
  */
 
 // Core dependencies
+import { HttpClientModule } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
@@ -31,7 +32,6 @@ import {
 } from "@angular/material";
 
 // App dependencies
-import { CCHttpModule } from "../cc-http/cc-http.module";
 import { CcPipeModule } from "../cc-pipe/cc-pipe.module";
 import { CCStopPropagationModule } from "../cc-stop-propagation/cc-stop-propagation.module";
 import { CcTypeaheadModule } from "../cc-typeahead/cc-typeahead.module";
@@ -58,7 +58,6 @@ import { FilesDAO } from "./shared/files.dao";
 import { FilesService } from "./shared/files.service";
 import { TableComponent } from "./table/table.component";
 import { CCAlertDialogComponent } from "../shared/cc-alert-dialog/cc-alert-dialog.component";
-import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
     imports: [
@@ -84,7 +83,6 @@ import { HttpClientModule } from "@angular/common/http";
         ReactiveFormsModule,
         RouterModule.forChild(routes),
 
-        CCHttpModule,
         CcPipeModule,
         CCStopPropagationModule,
         CcTypeaheadModule,

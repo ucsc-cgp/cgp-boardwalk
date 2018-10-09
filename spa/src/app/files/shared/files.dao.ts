@@ -4,15 +4,17 @@
  *
  * Data access object, connecting to file-related end points.
  */
+
 // Core dependencies
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Http, URLSearchParams } from "@angular/http";
 import * as _ from "lodash";
 import { Observable } from "rxjs/Observable";
-import { CCBaseDAO } from "./../../cc-http";
 import "rxjs/add/observable/of";
+import "rxjs/add/operator/delay";
 
 // App dependencies
+import { ConfigService } from "../../config/config.service";
 import { FacetTermsResponse } from "./facet-terms-response.model";
 import { FileSummary } from "../file-summary/file-summary";
 import { FileManifestSummary } from "../file-manifest-summary/file-manifest-summary";
@@ -21,11 +23,8 @@ import { Dictionary } from "../../shared/dictionary";
 import { ICGCQuery } from "./icgc-query";
 import { Term } from "./term.model";
 import { FileFacet } from "./file-facet.model";
-import { ConfigService } from "../../config/config.service";
 import { TableModel } from "../table/table.model";
-import { PaginationModel } from "../table/pagination.model";
 import { TableParamsModel } from "../table/table-params.model";
-import "rxjs/add/operator/delay";
 
 enum ExportFormat {
     TSV = "tsv",
@@ -33,49 +32,39 @@ enum ExportFormat {
 }
 
 @Injectable()
-export class FilesDAO extends CCBaseDAO {
-
-    constructor(http: Http, private configService: ConfigService) {
-        super(http);
-    }
+export class FilesDAO {
 
     /**
-     * Fet FileSummary
-     *
-     * http://docs.icgc.org/portal/api-endpoints/#!/repository/getSummary
-     *
-     * @param [selectedFacets]
-     * @returns {Observable<FileSummary>}
+     * @param {ConfigService} configService
+     * @param {HttpClient} httpClient
      */
-    fetchFileSummary(selectedFacets?: FileFacet[]): Observable<FileSummary> {
-
-        const query = new ICGCQuery(this.facetsToQueryString(selectedFacets));
-
-        const url = this.buildApiUrl(`/repository/files/summary`);
-        const filterParams = Object.assign({}, query);
-        return this.get<FileSummary>(url, filterParams);
+    constructor(private configService: ConfigService, private httpClient: HttpClient) {
     }
-
 
     /**
      * Fetch FileFacets
      *
      * http://docs.icgc.org/portal/api-endpoints/#!/repository/findAll
      *
-     * @param selectedFacetsByName
+     * @param {Map<string, FileFacet>} selectedFacetsByName
      * @param ordering
      * @returns {Observable<FileFacet[]>}
      */
-    fetchFileFacets(selectedFacetsByName: Map<string, FileFacet>, ordering): Observable<FileFacet[]> {
+    public fetchFileFacets(selectedFacetsByName: Map<string, FileFacet>, ordering): Observable<FileFacet[]> {
 
-        const selectedFacets = Array.from(selectedFacetsByName.values());
-
-        const query = new ICGCQuery(this.facetsToQueryString(selectedFacets));
-
+        // Build the API URL
         const url = this.buildApiUrl(`/repository/files`);
-        const filterParams = Object.assign({ from: 1, size: 1 }, query);
 
-        return this.get<FilesAPIResponse>(url, filterParams)
+        // Build up the query params
+        const selectedFacets = Array.from(selectedFacetsByName.values());
+        const filters = this.facetsToQueryString(selectedFacets);
+        const params = new HttpParams()
+            .set("from", "1")
+            .set("size", "1")
+            .set("filters", filters);
+
+        return this.httpClient
+            .get<FilesAPIResponse>(url, {params})
             .map((repositoryFiles: FilesAPIResponse) => {
                     return this.createFileFacets(selectedFacetsByName, repositoryFiles, ordering);
                 }
@@ -83,60 +72,76 @@ export class FilesDAO extends CCBaseDAO {
     }
 
     /**
-     * Fetch the table data
+     * Fetch file summary.
+     *
+     * http://docs.icgc.org/portal/api-endpoints/#!/repository/getSummary
+     *
+     * @param {FileFacet[]} selectedFacets
+     * @returns {Observable<FileSummary>}
+     */
+    public fetchFileSummary(selectedFacets?: FileFacet[]): Observable<FileSummary> {
+
+        // Build up API URL
+        const url = this.buildApiUrl(`/repository/files/summary`);
+
+        // Build up the query params
+        const filters = this.facetsToQueryString(selectedFacets);
+        const params = new HttpParams()
+            .set("filters", filters);
+
+        return this.httpClient.get<FileSummary>(url, {params});
+    }
+
+    /**
+     * Fetch facet ordering.
+     *
+     * @returns {Observable<Ordering>}
+     */
+    public fetchFacetOrdering(): Observable<Ordering> {
+
+        const url = this.buildApiUrl(`/repository/files/order`);
+        return this.httpClient.get<Ordering>(url);
+    }
+
+    /**
+     * Fetch file table data.
      *
      * @param {Map<string, FileFacet>} selectedFacetsByName
-     * @param {PaginationModel} pagination
+     * @param {TableParamsModel} tableParams
      * @returns {Observable<TableModel>}
      */
-    fetchFileTableData(selectedFacetsByName: Map<string, FileFacet>, tableParams: TableParamsModel): Observable<TableModel> {
+    public fetchFileTableData(selectedFacetsByName: Map<string, FileFacet>, tableParams: TableParamsModel): Observable<TableModel> {
 
+        // Build API URL
+        const url = this.buildApiUrl(`/repository/files/`);
+
+        // Build query params
         const selectedFacets = Array.from(selectedFacetsByName.values());
+        const filters = this.facetsToQueryString(selectedFacets);
 
-        const query = new ICGCQuery(this.facetsToQueryString(selectedFacets));
+        const params = new HttpParams()
+            .set("filters", filters)
+            .set("from", tableParams.from.toString(10))
+            .set("size", tableParams.size.toString(10));
 
-        const url = this.buildApiUrl(`/repository/files`);
-        let filterParams = Object.assign({ from: tableParams.from, size: tableParams.size }, query);
-        if (tableParams.sort && tableParams.order) {
-            filterParams = Object.assign(filterParams, { sort: tableParams.sort, order: tableParams.order });
+        if ( tableParams.sort && tableParams.order ) {
+            params
+                .set("sort", tableParams.sort)
+                .set("order", tableParams.order);
         }
 
-        return this.get<FilesAPIResponse>(url, filterParams)
+        return this.httpClient.get<FilesAPIResponse>(url, {params})
             .map((repositoryFiles: FilesAPIResponse) => {
                     // keep our size as this is being lost on API return at the moment when the result set is less than
                     // the page size.
-                    let pagination = Object.assign(repositoryFiles.pagination, { size: tableParams.size });
+                    let pagination = Object.assign(repositoryFiles.pagination, {size: tableParams.size});
                     return new TableModel(repositoryFiles.hits, repositoryFiles.pagination);
                 }
             );
     }
 
     /**
-     * Fetch Facet Ordering
-     *
-     * @returns {Observable<Ordering>}
-     */
-    fetchFacetOrdering(): Observable<Ordering> {
-        const url = this.buildApiUrl(`/repository/files/order`);
-        return this.get(url);
-    }
-
-    /**
-     * Fetch Ordered File Facets
-     *
-     * @param {Map<string, FileFacet>} selectedFacetsByName
-     * @returns {Observable<FileFacet[]>}
-     */
-    fetchOrderedFileFacets(selectedFacetsByName: Map<string, FileFacet>): Observable<FileFacet[]> {
-
-        return this.fetchFacetOrdering()
-            .switchMap((ordering: Ordering) => {
-                return this.fetchFileFacets(selectedFacetsByName, ordering);
-            });
-    }
-
-    /**
-     * Fetch Manifest Summary
+     * Fetch manifest summary.
      *
      * @param selectedFacets
      * @returns {Observable<FileManifestSummary>}
@@ -148,7 +153,7 @@ export class FilesDAO extends CCBaseDAO {
         const filters = JSON.parse(query.filters);
         let repoNames = []; // TODO empty array default throws an error. There needs to be something in the repoNames
 
-        if (filters.file && filters.file.repoName) {
+        if ( filters.file && filters.file.repoName ) {
             repoNames = filters.file.repoName.is;
         }
 
@@ -162,16 +167,30 @@ export class FilesDAO extends CCBaseDAO {
 
         const url = this.buildApiUrl("/repository/files/summary/manifest");
 
-        return this.post<Dictionary<FileManifestSummary>>(url, form);
+        return this.httpClient.post<Dictionary<FileManifestSummary>>(url, form);
     }
 
     /**
-     * Download Manifest
+     * Fetch ordered file facets.
+     *
+     * @param {Map<string, FileFacet>} selectedFacetsByName
+     * @returns {Observable<FileFacet[]>}
+     */
+    public fetchOrderedFileFacets(selectedFacetsByName: Map<string, FileFacet>): Observable<FileFacet[]> {
+
+        return this.fetchFacetOrdering()
+            .switchMap((ordering: Ordering) => {
+                return this.fetchFileFacets(selectedFacetsByName, ordering);
+            });
+    }
+
+    /**
+     * Download manifest.
      *
      * @param selectedFacets
      * @returns {any}
      */
-    downloadFileManifest(selectedFacets: FileFacet[]): Observable<any> {
+    public downloadFileManifest(selectedFacets: FileFacet[]): Observable<any> {
 
         const query = new ICGCQuery(this.facetsToQueryString(selectedFacets), "tarball");
 
@@ -184,16 +203,30 @@ export class FilesDAO extends CCBaseDAO {
         return Observable.of(true); // TODO error handling? I'm not sure setting the href causes any errors
     }
 
+    /**
+     * Export to FireCloud.
+     *
+     * @param {FileFacet[]} selectedFacets
+     * @returns {Observable<boolean>}
+     */
     exportToFireCloud(selectedFacets: FileFacet[]): Observable<boolean> {
-        const query = new ICGCQuery(this.facetsToQueryString(selectedFacets), "bdbag");
+
         // Need to open window here, as browser will not let you open it in a callback.
         const newWindow = window.open("", "_blank");
 
+        // Build up export URL
         const url = this.buildExportUrl(selectedFacets);
-        return this.get(url, query)
+
+        // Build query params
+        const filters = this.facetsToQueryString(selectedFacets);
+        const params = new HttpParams()
+            .set("filters", filters)
+            .set("format", "bdbag");
+
+        return this.httpClient.get<any>(url, {params})
             .map((resp: any) => {
                 const bdbagUrl = encodeURIComponent(resp.url);
-                const url = `https://bvdp-saturn-prod.appspot.com/#import-data?url=${bdbagUrl}`;
+                const url = `https://bvdp-saturn-prod.appspot.com/#import-data?url=${bdbagUrl}`; // TODO revisit - overrides export URL above
                 newWindow.location.href = url;
                 return true;
             });
@@ -215,14 +248,26 @@ export class FilesDAO extends CCBaseDAO {
         return `${domain}${url}`;
     }
 
+    /**
+     * Build data URL.
+     *
+     * @param {string} url
+     * @returns {string}
+     */
     private buildDataUrl(url: string) {
 
         const domain = this.configService.getDataURL();
         return `${domain}${url}`;
     }
 
+    /**
+     * Build export URL.
+     * @param {FileFacet[]} selectedFacets
+     * @returns {string}
+     */
     private buildExportUrl(selectedFacets: FileFacet[]) {
-        return this.buildApiUrl(`//repository/files/export`);
+
+        return this.buildApiUrl(`/repository/files/export`);
     }
 
     /**
@@ -238,7 +283,6 @@ export class FilesDAO extends CCBaseDAO {
         // Determine the set of facets that are to be displayed
         const visibleFacets = _.pick(filesAPIResponse.termFacets, ordering.order) as Dictionary<FacetTermsResponse>;
 
-
         // Calculate the number of terms to display on each facet card
         const shortListLength = this.calculateShortListLength(visibleFacets);
 
@@ -252,18 +296,18 @@ export class FilesDAO extends CCBaseDAO {
 
             // the response from ICGC is missing the terms field instead of being an empty array
             // we need to check it's existence before iterating over it.
-            if (responseFileFacet.terms) {
+            if ( responseFileFacet.terms ) {
 
                 // Create term from response, maintaining the currently selected term.
                 responseTerms = responseFileFacet.terms.map((responseTerm) => {
 
                     let oldTerm: Term;
-                    if (oldFacet) {
+                    if ( oldFacet ) {
                         oldTerm = oldFacet.termsByName.get(responseTerm.term);
                     }
 
                     let selected = false;
-                    if (oldTerm) {
+                    if ( oldTerm ) {
                         selected = oldTerm.selected;
                     }
 
@@ -271,7 +315,7 @@ export class FilesDAO extends CCBaseDAO {
                 });
             }
 
-            if (!responseFileFacet.total) {
+            if ( !responseFileFacet.total ) {
                 responseFileFacet.total = 0; // their default is undefined instead of zero
             }
 
@@ -280,12 +324,12 @@ export class FilesDAO extends CCBaseDAO {
         });
 
         let fileIdTerms = [];
-        if (selectedFacetsByName.get("fileId")) {
+        if ( selectedFacetsByName.get("fileId") ) {
             fileIdTerms = selectedFacetsByName.get("fileId").terms;
         }
 
         let donorIdTerms = [];
-        if (selectedFacetsByName.get("donorId")) {
+        if ( selectedFacetsByName.get("donorId") ) {
             donorIdTerms = selectedFacetsByName.get("donorId").terms;
         }
 
@@ -298,7 +342,7 @@ export class FilesDAO extends CCBaseDAO {
         newFileFacets.unshift(fileIdFileFacet);
 
         // Check if we have a sort order and if so, order facets accordingly
-        if (ordering.order.length) {
+        if ( ordering.order.length ) {
 
             const facetMap = newFileFacets.reduce((acc: Map<string, FileFacet>, facet: FileFacet) => {
                 return acc.set(facet.name, facet);
@@ -350,10 +394,10 @@ export class FilesDAO extends CCBaseDAO {
 
         // Generalize term count for display
         let maxTermCount = parseInt(termCount, 10);
-        if (maxTermCount <= 3) {
+        if ( maxTermCount <= 3 ) {
             maxTermCount = 3;
         }
-        else if (maxTermCount > 10) {
+        else if ( maxTermCount > 10 ) {
             maxTermCount = 10;
         }
 
@@ -377,7 +421,7 @@ export class FilesDAO extends CCBaseDAO {
         let filters = selectedFacets.reduce((facetAcc, facet) => {
 
             // paranoid check for no facets.
-            if (!facet.terms || !facet.terms.length) {
+            if ( !facet.terms || !facet.terms.length ) {
                 return facetAcc;
             }
 
@@ -386,16 +430,16 @@ export class FilesDAO extends CCBaseDAO {
                 return term.name;
             });
 
-            if (termNames.length) {
+            if ( termNames.length ) {
                 // only add the facet if there is a selected term.
-                facetAcc[facet.name] = { is: termNames };
+                facetAcc[facet.name] = {is: termNames};
             }
 
             return facetAcc;
         }, {});
 
         // empty object if it doesn't have any filters;
-        const result = Object.keys(filters).length ? { file: filters } : {};
+        const result = Object.keys(filters).length ? {file: filters} : {};
         return JSON.stringify(result);
     }
 }

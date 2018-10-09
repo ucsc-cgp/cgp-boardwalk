@@ -9,13 +9,13 @@
                 <a href="{{rootUrl}}/index.html">Home</a>
             </cc-toolbar-nav-item>
             <cc-toolbar-nav-item class="active">
-                <a href="{{rootUrl}}/boardwalk.html">Data Browser</a>
+                <a href="{{rootUrl}}/boardwalk">Data Browser</a>
             </cc-toolbar-nav-item>
             <cc-toolbar-nav-item *ngIf="(authorizedUser$ | async) as user">
-                <a href="{{rootUrl}}/logout"><img src="{{user.avatar}}" alt="{{user.name}}" height="20" width="20">Logout</a>
+                <a href="{{rootUrl}}/logout" class="logout">{{user.name}}<span>Logout</span></a>
             </cc-toolbar-nav-item>
             <cc-toolbar-nav-item *ngIf="!(authorizedUser$ | async)">
-                <a href="{{rootUrl}}/login">Login</a>
+                <a href="{{rootUrl}}/authenticate">Login</a>
             </cc-toolbar-nav-item>
         </cc-toolbar-nav>
     </mat-toolbar-row>

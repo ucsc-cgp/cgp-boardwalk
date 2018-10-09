@@ -43,7 +43,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                 }
                 // Navigate to register on 403
                 else if ( response instanceof HttpErrorResponse && response.status === 403 ) {
-                    this.document.location.replace(`${rootUrl}/unathorized`);
+                    this.document.location.replace(`${rootUrl}/unauthorized`);
                 }
                 return Observable.throw(response);
             });

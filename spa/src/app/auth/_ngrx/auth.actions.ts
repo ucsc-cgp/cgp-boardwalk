@@ -31,19 +31,10 @@ export class LogoutAction implements Action {
     constructor() {}
 }
 
-export class DownloadRedwoodTokenAction implements Action {
-    public static ACTION_TYPE = "AUTH.DOWNLOAD_REDWOOD_TOKEN";
-    public readonly type = DownloadRedwoodTokenAction.ACTION_TYPE;
-    constructor() {}
-}
 
 export type All
     = AuthenticationSuccessAction
     | AuthenticationRequestedAction
-    // | AuthenticationFailedAction
     | SyncSessionRequestAction
     | SyncSessionSuccessAction
-    | LogoutAction
-    | DownloadRedwoodTokenAction;
-    // | LoginRedirectAction
-    // | AuthorizedRedirectAction;
+    | LogoutAction;

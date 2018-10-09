@@ -6,12 +6,14 @@
  */
 
 // Core dependencies
-import { Injectable } from "@angular/core";
+import { Inject, Injectable } from "@angular/core";
+import { DOCUMENT } from "@angular/common";
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Router } from "@angular/router";
 import "rxjs/add/operator/catch";
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/observable/throw";
+import { ConfigService } from "../config/config.service";
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -19,7 +21,7 @@ export class ErrorInterceptor implements HttpInterceptor {
     /**
      * @param {Router} router
      */
-    constructor(private router: Router) {}
+    constructor(private router: Router, private configService: ConfigService, @Inject(DOCUMENT) private document: any) {}
 
     /**
      * Gobal handling of 401 responses; redirect to login page.
@@ -33,13 +35,15 @@ export class ErrorInterceptor implements HttpInterceptor {
         return next.handle(request)
             .catch((response: any) => {
 
+                const rootUrl = this.configService.getDataURL();
+
                 // Navigate to login on 401
                 if ( response instanceof HttpErrorResponse && response.status === 401 ) {
                     this.router.navigateByUrl("/authenticate");
                 }
                 // Navigate to register on 403
                 else if ( response instanceof HttpErrorResponse && response.status === 403 ) {
-                    this.router.navigateByUrl("/register");
+                    this.document.location.replace(`${rootUrl}/unathorized`);
                 }
                 return Observable.throw(response);
             });

@@ -11,7 +11,7 @@ import { Store } from "@ngrx/store";
 import { Observable } from "rxjs/Observable";
 
 // App dependencies
-import { DownloadRedwoodTokenAction } from "../../auth/_ngrx/auth.actions";
+
 import { selectAuthenticated, selectAuthenticatedUser } from "../../auth/_ngrx/auth.selectors";
 import { ConfigService } from "../../config/config.service";
 import { User } from "../../data/user/user.model";
@@ -28,7 +28,6 @@ export class CGLToolbarComponent {
     // Locals
     authenticated$: Observable<boolean>;
     authorizedUser$: Observable<User>;
-    hasRedwoodToken$: Observable<boolean>;
     rootUrl: string;
 
     /**
@@ -47,17 +46,7 @@ export class CGLToolbarComponent {
             return null;
         });
 
-        this.hasRedwoodToken$ = this.authorizedUser$.map((user: User) => {
-            return false;
-        });
-
         this.rootUrl = this.configService.getDataURL();
     }
 
-    /**
-     * Dispatch Redwood download token action.
-     */
-    onDownloadRedwoodToken() {
-        this.store.dispatch(new DownloadRedwoodTokenAction());
-    }
 }

@@ -23,18 +23,6 @@ export class UserService {
     }
 
     /**
-     * Download Redwood token
-     *
-     * @returns {Observable<void>}
-     */
-    public downloadRedwoodToken(): Observable<boolean> {
-
-        window.location.href = `/api/user/redwood-token`;
-        // return this.get(`/api/user/redwood-token`);
-        return Observable.of(true);
-    }
-
-    /**
      * Sync Session
      *
      * @returns {Observable<User>}

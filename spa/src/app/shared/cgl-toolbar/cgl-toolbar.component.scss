@@ -20,6 +20,10 @@ mat-toolbar {
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.24);
     color: $cgl-green;
     position: relative;
+    
+    img {
+        height: 48px;
+    }
 
     // Menu is hidden by default
     [menu-close] {

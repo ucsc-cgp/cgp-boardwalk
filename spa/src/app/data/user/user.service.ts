@@ -4,14 +4,13 @@
  *
  * Data Access Object for hitting user-related API end points.
  */
-
 // Core dependencies
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-
 // App dependencies
 import { User } from "./user.model";
 import { HttpClient } from "@angular/common/http";
+import { ConfigService } from "../../config/config.service";
 
 @Injectable()
 export class UserService {
@@ -19,7 +18,7 @@ export class UserService {
     /**
      * @param {HttpClient} httpClient
      */
-    constructor(private httpClient: HttpClient) {
+    constructor(private configService: ConfigService, private httpClient: HttpClient) {
     }
 
     /**
@@ -29,6 +28,14 @@ export class UserService {
      */
     public syncSession(): Observable<User> {
 
-        return this.httpClient.get<User>(`/me`);
+        const url = this.buildApiUrl("/me");
+        return this.httpClient.get<User>(url);
     }
+
+    private buildApiUrl(url: string) {
+
+        const domain = this.configService.getAPIURL();
+        return `${domain}${url}`;
+    }
+
 }

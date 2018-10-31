@@ -4,36 +4,31 @@
  *
  * Client-side configuration file.
  */
-
 // Core dependencies
 import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/take";
-
 // App dependencies
-import { ConfigDAO } from "./config.dao";
 import { Config } from "./config.model";
 import { AppState } from "../_ngrx/app.state";
-import { selectConfigConfig } from "./_ngrx/config.selectors";
 import { FetchConfigRequestSuccessAction } from "./_ngrx/config.actions";
+
+import { environment } from "../../environments/environment";
 
 @Injectable()
 export class ConfigService {
 
     // Locals
-    private configDAO: ConfigDAO;
     private dataURL: string; // Pulled from config store, saved as local state here on service
+    private portalURL: string;
     private store: Store<AppState>;
 
     /**
      * @param {ConfigDAO} configDAO
      * @param store {Store<AppState>}
      */
-    constructor(configDAO: ConfigDAO, store: Store<AppState>) {
-
-        this.configDAO = configDAO;
+    constructor(store: Store<AppState>) {
         this.store = store;
     }
 
@@ -51,11 +46,8 @@ export class ConfigService {
      */
     public initConfig(): Promise<Config> {
 
-        let promise = this.configDAO.fetchConfig();
-        promise.then((config: Config) => {
-            this.storeConfig(config);
-        });
-        return promise;
+        this.storeConfig(environment as Config);
+        return Promise.resolve(environment as Config);
     }
 
     /**
@@ -69,13 +61,24 @@ export class ConfigService {
     }
 
     /**
+     * Return the data URL for this Boardwalk instance.
+     *
+     * @returns {string}
+     */
+    public getPortalURL(): string {
+
+        return this.portalURL;
+    }
+
+
+    /**
      * Return the full data API URL for this Boardwalk instance.
      *
      * @returns {string}
      */
     public getAPIURL(): string {
 
-        return `${this.dataURL}/api/v1`;
+        return `${this.dataURL}`;
     }
 
     /**
@@ -86,6 +89,7 @@ export class ConfigService {
     private storeConfig(config: Config): void {
 
         this.dataURL = config.dataURL;
+        this.portalURL = config.portalURL;
         this.store.dispatch(new FetchConfigRequestSuccessAction(config));
     }
 }

@@ -28,7 +28,8 @@ export class CGLToolbarComponent {
     // Locals
     authenticated$: Observable<boolean>;
     authorizedUser$: Observable<User>;
-    rootUrl: string;
+    rootURL: string;
+    authURL: string;
 
     /**
      * @param {Store<AppState>} store
@@ -46,7 +47,8 @@ export class CGLToolbarComponent {
             return null;
         });
 
-        this.rootUrl = this.configService.getDataURL();
+        this.rootURL = this.configService.getPortalURL();
+        this.authURL = this.configService.getDataURL();
     }
 
 }

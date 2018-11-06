@@ -5,7 +5,7 @@ DEV_BUCKET := s3://dev.bw.commons.ucsc-cgp-dev.org/
 .EXPORT_ALL_VARIABLES:
 
 build:
-	./spa/npm run build-develop
+	./spa npm run build-develop
 
 deploy-staging-travis:
 	aws s3 sync --acl public-read dist/ $(STAGING_BUCKET) --delete

@@ -5,7 +5,7 @@ DEV_BUCKET := s3://dev.bw.commons.ucsc-cgp-dev.org/
 .EXPORT_ALL_VARIABLES:
 
 build:
-	cd spa; npm run build-develop
+	cd spa; npm run build-develop; cd ..
 
 
 deploy-staging-travis:

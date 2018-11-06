@@ -6,11 +6,11 @@ DEV_BUCKET := s3://dev.bw.commons.ucsc-cgp-dev.org/
 
 build:
     cd spa
-	npm run build-develop
-	cd ..
+    npm run build-develop
+    cd ..
 
 deploy-staging-travis:
-	aws s3 sync --acl public-read dist/ $(STAGING_BUCKET) --delete
+    aws s3 sync --acl public-read dist/ $(STAGING_BUCKET) --delete
 	aws cloudfront create-invalidation --distribution-id EB0RHFRVO3AA0 --paths "/*"
 
 deploy-integration-travis:

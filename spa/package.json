@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "node  ng serve -v ",
+    "start": "ng serve -v ",
     "build": "ng build --prod -aot false -op ../dist",
     "build-develop": "ng build --prod -aot false -op ../dist/explore --env=develop --base-href=/explore/",
     "test": "ng test",

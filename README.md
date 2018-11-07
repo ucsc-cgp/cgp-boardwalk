@@ -28,6 +28,16 @@ To start the Angular.js development server, run the following from the `spa` dir
 You can hit the server at `http://localhost:4200`
 
 
+## Hosting Setup
+
+Boardwalk is setup to be hosted in "serverless" manner using S3 buckets to host the index.html and other site artifacts. This S3 bucket is setup to be behind an AWS Cloudfront instance that provides caching and also allows the related documentation portal to be deployed on the same sub domain as the Boardwalk application.
+
+
 ## Deploying
 
-Deploying is done with the .travis.yml script. Currently the there is only one environment. See the .travis.yml file for details. 
+Deploying is done with the .travis.yml script. Currently the there is only one environment for the `serverless` git branch. See the .travis.yml file for details. The script runs automatically on pushing to the serverless branch on github.
+
+Pushing to the git repo triggers a build and then a deploy. The build is run using the Angular CLI. The deploy is run by pushing the build artifacts to the the AWS S3 bucket for the appropriate environment and then invalidates the cache.
+
+
+

@@ -50,3 +50,13 @@ export const selectTableQueryParams = createSelector(selectSelectedFacetsMap, se
     return { selectedFacets, pagination };
 });
 
+/**
+ * Return the selected view state - currently only returns selected facets but could potentially return the selected
+ * entity (ie tab) in the future.
+ */
+export const selectSelectedViewState = createSelector(selectSelectedFileFacets, (selectSelectedFileFacets) => {
+    return {
+        selectSelectedFileFacets
+    };
+});
+

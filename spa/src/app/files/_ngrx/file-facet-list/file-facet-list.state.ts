@@ -8,8 +8,10 @@
 
 // App dependencies
 import { FileFacet } from "../../shared/file-facet.model";
-import { FetchFileFacetsSuccessAction, SelectFileFacetAction } from "./file-facet-list.actions";
+import { FetchFileFacetsSuccessAction, SelectFileFacetAction, SetViewStateAction } from "./file-facet-list.actions";
 import { PaginationModel } from "../../table/pagination.model";
+import { QueryStringFacet } from "../../shared/query-string-facet.model";
+import { Term } from "../../shared/term.model";
 
 export class FileFacetListState {
 
@@ -131,6 +133,44 @@ export class FileFacetListState {
         // Return new state of file facet list (ie with newly selected/deselected term and potentially newly selected
         // facet).
         return new FileFacetListState(this.fileFacetNames, m, selectedFacet, this.paginationModel);
+    }
+
+    /**
+     * Handle select of facet terms on init of app. App state is pulled from URL params and we must convert this to
+     * a set of selected facet terms, if any.
+     *
+     * @param {SelectFileFacetAction} action
+     * @returns {FileFacetListState}
+     */
+    public setSelectedTermsFromViewState(action: SetViewStateAction): FileFacetListState {
+
+        // Update new state with selected terms
+        const selectedFacetStates = action.selectedFacets;
+
+        // Create file facet names
+        const fileFacetNames = selectedFacetStates.map((selectedFacetState: QueryStringFacet) => {
+            return selectedFacetState.facetName;
+        });
+
+        // Create file facet and term objects, and add to map
+        const fileFacetsMap = selectedFacetStates.reduce((accum, selectedFacetState: QueryStringFacet) => {
+
+            // Create the terms for this file facet - default term count to 0 and color to black. Term has been specified
+            // in the URL as selected so set the selected flag accordingly.
+            const terms = selectedFacetState.selectedTermNames.map((termName: string) => {
+                return new Term(termName, 0, true, "#000000");
+            });
+
+            // Create the file facet, set total and short list length to 0; these values will be updated on the initial
+            // request of file facet data from the server.
+            const facetName = selectedFacetState.facetName;
+            const fileFacet = new FileFacet(facetName, 0, terms, 0);
+
+            accum.set(facetName, fileFacet);
+            return accum;
+        }, new Map<string, FileFacet>());
+
+        return new FileFacetListState(fileFacetNames, fileFacetsMap, null, null);
     }
 
     /**

@@ -58,7 +58,7 @@ export class FilesComponent implements OnInit {
                 private sanitizer: DomSanitizer) {
 
         iconRegistry.addSvgIcon("firecloud",
-            sanitizer.bypassSecurityTrustResourceUrl("/assets/images/thirdparty/FireCloud-white-icon.svg"));
+            sanitizer.bypassSecurityTrustResourceUrl("assets/images/thirdparty/FireCloud-white-icon.svg"));
     }
 
     /**

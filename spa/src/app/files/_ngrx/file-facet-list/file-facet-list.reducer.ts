@@ -13,9 +13,9 @@ import { Action } from "@ngrx/store";
 import { FileFacetListState } from "./file-facet-list.state";
 import {
     ClearSelectedFileFacetsAction,
-    FetchFileFacetsSuccessAction, 
+    FetchFileFacetsSuccessAction,
     FetchFileFacetsRequestAction,
-    SelectFileFacetAction
+    SelectFileFacetAction, SetViewStateAction
 } from "./file-facet-list.actions";
 
 /**
@@ -41,6 +41,12 @@ export function reducer(state: FileFacetListState = FileFacetListState.getDefaul
             
         case ClearSelectedFileFacetsAction.ACTION_TYPE:
             return state.clearSelectedFacet();
+
+        // Handle the case where the view state has been parsed from URL param on app init - must do this here to set
+        // the initial set of selected facet terms.
+        case SetViewStateAction.ACTION_TYPE:
+
+            return state.setSelectedTermsFromViewState(action as SetViewStateAction);
             
         default:
             return state;

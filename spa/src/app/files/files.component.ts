@@ -6,10 +6,12 @@
  */
 
 // Core dependencies
+import { Location } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { MatDialog, MatIconRegistry } from "@angular/material";
 import { DomSanitizer } from "@angular/platform-browser";
 import { ActivatedRoute } from "@angular/router";
+import * as _ from "lodash";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/map";
@@ -19,7 +21,12 @@ import "rxjs/add/operator/skip";
 import { AppState } from "../_ngrx/app.state";
 import { FileExportManifestRequestAction } from "./_ngrx/file-export/file-export.actions";
 import { FetchFileFacetsRequestAction } from "./_ngrx/file-facet-list/file-facet-list.actions";
-import { selectFileFacetsFileFacets, selectFileSummary, selectSelectedFileFacets } from "./_ngrx/file.selectors";
+import {
+    selectFileFacetsFileFacets,
+    selectFileSummary,
+    selectSelectedFileFacets,
+    selectSelectedViewState
+} from "./_ngrx/file.selectors";
 import {
     DownloadFileManifestAction,
     FetchFileManifestSummaryRequestAction
@@ -45,6 +52,7 @@ export class FilesComponent implements OnInit {
      */
     constructor(private route: ActivatedRoute,
                 private store: Store<AppState>,
+                private location: Location,
                 private dialog: MatDialog,
                 private iconRegistry: MatIconRegistry,
                 private sanitizer: DomSanitizer) {
@@ -143,5 +151,30 @@ export class FilesComponent implements OnInit {
 
         // Initialize the filter state from the params in the route.
         this.initQueryParams();
+
+        // Set up the URL state management - write the browser address bar when the selected facets change.
+        this.store.select(selectSelectedViewState)
+            .distinctUntilChanged((previous, current) => {
+                return _.isEqual(previous, current);
+            })
+            .subscribe((viewState) => {
+
+                // Convert facets to query string state
+                const queryStringFacets = viewState.selectSelectedFileFacets.reduce((accum, selectedFacet) => {
+                    accum.add({
+                        facetName: selectedFacet.name,
+                        terms: selectedFacet.selectedTerms.map(term => term.name)
+                    });
+                    return accum;
+                }, new Set<any>());
+
+                const path = /*viewState.selectSelectedEntity.key*/"boardwalk";
+                const params = new URLSearchParams();
+                if ( queryStringFacets.size > 0 ) {
+                    params.set("filter", JSON.stringify(Array.from(queryStringFacets)));
+                }
+
+                this.location.replaceState(path, params.toString());
+            });
     }
 }

@@ -26,7 +26,7 @@ import { FileSummary } from "../file-summary/file-summary";
 import {
     FetchFileFacetsRequestAction,
     FetchFileFacetsSuccessAction,
-    SelectFileFacetAction
+    SelectFileFacetAction, SetViewStateAction
 } from "./file-facet-list/file-facet-list.actions";
 import { FetchFileSummaryRequestAction, FetchFileSummarySuccessAction } from "./file-summary/file-summary.actions";
 import {
@@ -255,7 +255,10 @@ export class FileEffects {
      */
     @Effect()
     initFacets$: Observable<Action> = this.actions$
-        .ofType(FetchFileFacetsRequestAction.ACTION_TYPE)
+        .ofType(
+            SetViewStateAction.ACTION_TYPE, // Setting up app state from URL params
+            FetchFileFacetsRequestAction.ACTION_TYPE
+        )
         .switchMap(() => {
             return this.store.select(selectSelectedFacetsMap).first();
         })

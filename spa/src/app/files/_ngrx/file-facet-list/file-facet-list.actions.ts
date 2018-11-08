@@ -5,9 +5,13 @@
  * File list-related actions.
  */
 
+// Core dependencies
 import { Action } from "@ngrx/store";
-import { FileFacet } from "../../shared/file-facet.model";
+
+// App dependencies
 import { FileFacetSelectedEvent } from "../../file-facets/file-facet.events";
+import { FileFacet } from "../../shared/file-facet.model";
+import { QueryStringFacet } from "../../shared/query-string-facet.model";
 
 export class FetchFileFacetsRequestAction implements Action {
     public static ACTION_TYPE = "FILE.FILE_FACET_LIST.FETCH_REQUEST";
@@ -37,9 +41,21 @@ export class ClearSelectedFileFacetsAction implements Action {
     constructor() {}
 }
 
+/**
+ * Action dispatched when current set of selected facet terms, as well as the corresponding tab (entity) are to be
+ * stored. Currently, this action is dispatched on app init when app state is read from URL params.
+ */
+export class SetViewStateAction implements Action {
+    public static ACTION_TYPE = "FILE.FILE_FACET_LIST.SET_VIEW_STATE";
+    public readonly type = SetViewStateAction.ACTION_TYPE;
+    constructor(public selectedEntity: string, public selectedFacets: QueryStringFacet[]) {
+    }
+}
+
 export type All
     = FetchFileFacetsRequestAction
     | FetchFileFacetsSuccessAction
     | SelectFileFacetAction
-    | ClearSelectedFileFacetsAction;
+    | ClearSelectedFileFacetsAction
+    | SetViewStateAction;
 

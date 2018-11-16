@@ -11,10 +11,10 @@
                 <a href="{{rootUrl}}/explore">Data Browser</a>
             </cc-toolbar-nav-item>
             <cc-toolbar-nav-item *ngIf="(authorizedUser$ | async) as user">
-                <a href="{{authURL}}/logout" class="logout">{{user.name}}<span>Logout</span></a>
+                <a href="https://dev.commons.ucsc-cgp-dev.org/logout" class="logout">{{user.name}}<span>Logout</span></a>
             </cc-toolbar-nav-item>
             <cc-toolbar-nav-item *ngIf="!(authorizedUser$ | async)">
-                <a href="{{authURL}}/login">Login</a>
+                <a href="https://dev.commons.ucsc-cgp-dev.org//login">Login</a>
             </cc-toolbar-nav-item>
         </cc-toolbar-nav>
     </mat-toolbar-row>

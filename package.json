@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server/dist/server.js",
-    "postinstall": "cd server && typings install"
+    "postinstall": "cd server && typings install",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -37,7 +39,8 @@
     "request": "2.82.0",
     "serve-favicon": "^2.3.0",
     "serve-static": "^1.11.1",
-    "ua-parser-js": "^0.7.10"
+    "ua-parser-js": "^0.7.10",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "@types/async": "^2.0.42",
@@ -63,5 +66,6 @@
     "tslint": "5.7.0",
     "typescript": "2.4.1",
     "typings": "^1.4.0"
-  }
+  },
+  "snyk": true
 }
